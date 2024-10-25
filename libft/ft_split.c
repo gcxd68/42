@@ -71,7 +71,8 @@ char	**ft_split(char const *s, char c)
 {
 	char	**arr;
 
-	if (!(arr = ft_calloc((ft_count_strs(s, c) + 1), sizeof(char *))))
+	arr = ft_calloc((ft_count_strs(s, c) + 1), sizeof(char *));
+	if (!arr)
 		return (NULL);
 	return (ft_fill_strs(arr, s, c));
 }
