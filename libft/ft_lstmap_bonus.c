@@ -33,3 +33,12 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	}
 	return (new_lst);
 }
+
+void	*f(void *content)
+{
+	int	*new_value = malloc(sizeof(int));
+	if (!new_value)
+		return (NULL);
+	*new_value = *(int *)content + 1;
+	return (new_value);
+}

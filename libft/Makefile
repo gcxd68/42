@@ -45,7 +45,7 @@ SRC =		ft_atoi.c \
 			ft_tolower.c \
 			ft_toupper.c
 
-OBJ =		$(SRC: .c=.o)
+OBJ =		$(SRC:.c=.o)
 
 SRCB =		ft_lstadd_back_bonus.c \
 			ft_lstadd_front_bonus.c \
@@ -57,7 +57,7 @@ SRCB =		ft_lstadd_back_bonus.c \
 			ft_lstnew_bonus.c \
 			ft_lstsize_bonus.c
 
-OBJB =		$(SRCB: .c=.o)
+OBJB =		$(SRCB:.c=.o)
 
 NAME =		libft.a
 CC =		cc
@@ -79,4 +79,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY		bonus all clean fclean re
+.PHONY:		bonus all clean fclean re
