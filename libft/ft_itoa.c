@@ -50,9 +50,9 @@ char	*ft_itoa(int n)
 	size_t	len;
 
 	if (n == 0)
-		return(ft_strdup("0"));
+		return (ft_strdup("0"));
 	if (n == -2147483648)
-		return(ft_strdup("-2147483648"));
+		return (ft_strdup("-2147483648"));
 	res = ft_calloc(ft_nlen(&n, &len) + 1, sizeof(char));
 	if (!res)
 		return (NULL);
