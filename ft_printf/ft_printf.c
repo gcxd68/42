@@ -63,9 +63,9 @@ static size_t	ft_format(const char *format, va_list args)
 	{
 		p = va_arg(args, void *);
 		if (!p)
-			return (ft_putstr_ct("(nil)"));
+			return (write(1, "(nil)", 5));
 		else
-			return (ft_putstr_ct("0x") + ft_putnbr_ct((unsigned long)p, 'p'));
+			return (write(1, "0x", 2) + ft_putnbr_ct((unsigned long)p, 'p'));
 	}
 	else if (*(format + 1) == 'd' || *(format + 1) == 'i')
 		return (ft_putnbr_ct(va_arg(args, int), 'd'));
