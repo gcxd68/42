@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static size_t	ft_putstr_ct(char *s)
+static size_t	ft_putstr_ct(const char *s)
 {
 	size_t	len;
 
@@ -26,8 +26,8 @@ static size_t	ft_putstr_ct(char *s)
 
 static size_t	ft_putnbr_ct(long n, char type)
 {
-	char	*base;
-	size_t	count;
+	const char	*base;
+	size_t		count;
 
 	base = NULL;
 	count = 0;
@@ -51,31 +51,31 @@ static size_t	ft_putnbr_ct(long n, char type)
 	return (count + 1);
 }
 
+static size_t	ft_putptr_ct(const void *p)
+{
+	if (!p)
+		return (write(1, "(nil)", 5));
+	else
+		return (write(1, "0x", 2) + ft_putnbr_ct((unsigned long)p, 'p'));
+}
+
 static size_t	ft_format(const char *format, va_list args)
 {
-	const void	*p;
-
-	if (*(format + 1) == 'c')
+	if (*(format) == 'c')
 		return (ft_putchar_fd(va_arg(args, int), 1), 1);
-	else if (*(format + 1) == 's')
+	else if (*(format) == 's')
 		return (ft_putstr_ct((char *)va_arg(args, const char *)));
-	else if (*(format + 1) == 'p')
-	{
-		p = va_arg(args, void *);
-		if (!p)
-			return (write(1, "(nil)", 5));
-		else
-			return (write(1, "0x", 2) + ft_putnbr_ct((unsigned long)p, 'p'));
-	}
-	else if (*(format + 1) == 'd' || *(format + 1) == 'i')
+	else if (*(format) == 'p')
+		return (ft_putptr_ct(va_arg(args, const void *)));
+	else if (*(format) == 'd' || *(format) == 'i')
 		return (ft_putnbr_ct(va_arg(args, int), 'd'));
-	else if (*(format + 1) == 'u')
+	else if (*(format) == 'u')
 		return (ft_putnbr_ct(va_arg(args, unsigned int), 'u'));
-	else if (*(format + 1) == 'x')
+	else if (*(format) == 'x')
 		return (ft_putnbr_ct(va_arg(args, unsigned int), 'x'));
-	else if (*(format + 1) == 'X')
+	else if (*(format) == 'X')
 		return (ft_putnbr_ct(va_arg(args, unsigned int), 'X'));
-	else if (*(format + 1) == '%')
+	else if (*(format) == '%')
 		return (write(1, "%", 1));
 	return (0);
 }
@@ -91,8 +91,8 @@ int	ft_printf(const char *format, ...)
 	{
 		if (*format == '%')
 		{
-			count += ft_format(format, args);
 			format ++;
+			count += ft_format(format, args);
 		}
 		else
 			count += write(1, format, 1);
@@ -101,7 +101,7 @@ int	ft_printf(const char *format, ...)
 	return (va_end(args), count);
 }
 
-int main(void)
+int	main(void)
 {
 	int		di = -42;
 	int		u = -1;
@@ -117,5 +117,3 @@ int main(void)
 	printf("len = %d\n", ft_printf("s%s%ct %p %d %s %p %i %u %x %X %% %s\n", "al", 'u', p, di, s, s, di, u, xl, xu, "jio"));
 	return (0);
 }
-
-// TESTER AVEC DES NULL + TESTEUR
