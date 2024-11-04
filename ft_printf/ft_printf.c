@@ -76,7 +76,7 @@ static size_t	ft_format(const char *format, va_list args)
 int	ft_printf(const char *format, ...)
 {
 	va_list		args;
-	int			count;
+	size_t		count;
 
 	va_start(args, format);
 	count = 0;
