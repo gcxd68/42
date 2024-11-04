@@ -14,38 +14,39 @@
 
 static size_t	ft_putstr_ct(const char *s)
 {
-	size_t	len;
+	size_t	count;
 
-	len = 0;
+	count = 0;
 	if (!s)
 		return (write(1, "(null)", 6));
-	while (s[len])
-		len += write(1, &s[len], 1);
-	return (len);
+	while (s[count])
+		count += write(1, &s[count], 1);
+	return (count);
 }
 
-static size_t	ft_putnbr_ct(long n, char type)
+static size_t	ft_putnbr_ct(unsigned long n, char type)
 {
 	const char	*base;
 	size_t		count;
 
-	base = NULL;
 	count = 0;
-	if (type == 'd' || type == 'u')
+	if (type == 'd')
 	{
 		base = "0123456789";
-		if (type == 'd' && n < 0)
+		if ((long)n < 0)
 		{
 			write(1, "-", 1);
-			n -= 2 * n;
+			n = -(long)n;
 			count++;
 		}
 	}
+	else if (type == 'u')
+		base = "0123456789";
 	else if (type == 'p' || type == 'x')
 		base = "0123456789abcdef";
 	else if (type == 'X')
 		base = "0123456789ABCDEF";
-	if (n >= (long)ft_strlen(base))
+	if (n >= ft_strlen(base))
 		count += ft_putnbr_ct(n / ft_strlen(base), type);
 	ft_putchar_fd(base[n % ft_strlen(base)], 1);
 	return (count + 1);
@@ -64,7 +65,7 @@ static size_t	ft_format(const char *format, va_list args)
 	if (*(format) == 'c')
 		return (ft_putchar_fd(va_arg(args, int), 1), 1);
 	else if (*(format) == 's')
-		return (ft_putstr_ct((char *)va_arg(args, const char *)));
+		return (ft_putstr_ct(va_arg(args, const char *)));
 	else if (*(format) == 'p')
 		return (ft_putptr_ct(va_arg(args, const void *)));
 	else if (*(format) == 'd' || *(format) == 'i')
