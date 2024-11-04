@@ -24,7 +24,7 @@ CFLAGS =		-Wall -Wextra -Werror
 all:			$(NAME)
 
 $(NAME):		$(OBJ) $(LIBFT)
-  				ar -rcs $(NAME) $(OBJ) $(LIBFT_PATH)/*.o
+				ar -rcs $(NAME) $(OBJ) $(LIBFT_PATH)/*.o
 
 $(LIBFT):
 				$(MAKE) -C $(LIBFT_PATH) all

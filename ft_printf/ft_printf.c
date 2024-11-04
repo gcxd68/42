@@ -100,20 +100,3 @@ int	ft_printf(const char *format, ...)
 	}
 	return (va_end(args), count);
 }
-
-int	main(void)
-{
-	int		di = -42;
-	int		u = -1;
-	int		*p = &di;
-	char	*s = NULL;
-	int		xl = -3;
-	int		xu = -5;
-
-	printf("printf : \n");
-	printf("len = %d\n", printf("s%s%ct %p %d %s %p %i %u %x %X %% %s\n", "al", 'u', p, di, s, s, di, u, xl, xu, "jio"));
-	printf("\n");
-	printf("ft_printf : \n");
-	printf("len = %d\n", ft_printf("s%s%ct %p %d %s %p %i %u %x %X %% %s\n", "al", 'u', p, di, s, s, di, u, xl, xu, "jio"));
-	return (0);
-}
