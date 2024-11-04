@@ -30,10 +30,10 @@ static size_t	ft_putnbr_ct(unsigned long n, char type)
 	size_t		count;
 
 	count = 0;
-	if (type == 'd' || type == 'u')
+	if (type == 'i' || type == 'u')
 	{
 		base = "0123456789";
-		if (type == 'd' && (long)n < 0)
+		if (type == 'i' && (long)n < 0)
 		{
 			count += write(1, "-", 1);
 			n = -(long)n;
@@ -64,14 +64,10 @@ static size_t	ft_format(const char *format, va_list args)
 		return (ft_putstr_ct(va_arg(args, const char *)));
 	else if (*format == 'p')
 		return (ft_putptr_ct(va_arg(args, const void *)));
-	else if (*format == 'd' || *(format) == 'i')
-		return (ft_putnbr_ct(va_arg(args, int), 'd'));
-	else if (*format == 'u')
-		return (ft_putnbr_ct(va_arg(args, unsigned int), 'u'));
-	else if (*format == 'x')
-		return (ft_putnbr_ct(va_arg(args, unsigned int), 'x'));
-	else if (*format == 'X')
-		return (ft_putnbr_ct(va_arg(args, unsigned int), 'X'));
+	else if (*format == 'd' || *format == 'i')
+		return (ft_putnbr_ct(va_arg(args, int), 'i'));
+	else if (*format == 'u' || *format == 'x' || *format == 'X')
+		return (ft_putnbr_ct(va_arg(args, unsigned int), *format));
 	else if (*format == '%')
 		return (write(1, "%", 1));
 	return (0);
