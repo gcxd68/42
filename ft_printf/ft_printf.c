@@ -12,9 +12,9 @@
 
 #include "ft_printf.h"
 
-static size_t	ft_putstr_ct(const char *s)
+static int	ft_putstr_ct(const char *s)
 {
-	size_t	count;
+	int	count;
 
 	count = 0;
 	if (!s)
@@ -24,10 +24,10 @@ static size_t	ft_putstr_ct(const char *s)
 	return (count);
 }
 
-static size_t	ft_putnbr_ct(unsigned long n, char type)
+static int	ft_putnbr_ct(unsigned long n, char type)
 {
 	const char	*base;
-	size_t		count;
+	int		count;
 
 	count = 0;
 	if (type == 'i' || type == 'u')
@@ -49,14 +49,14 @@ static size_t	ft_putnbr_ct(unsigned long n, char type)
 	return (count + 1);
 }
 
-static size_t	ft_putptr_ct(const void *p)
+static int	ft_putptr_ct(const void *p)
 {
 	if (!p)
 		return (write(1, "(nil)", 5));
 	return (write(1, "0x", 2) + ft_putnbr_ct((unsigned long)p, 'p'));
 }
 
-static size_t	ft_format(const char *format, va_list args)
+static int	ft_format(const char *format, va_list args)
 {
 	if (*format == 'c')
 		return (ft_putchar_fd(va_arg(args, int), 1), 1);
@@ -75,8 +75,8 @@ static size_t	ft_format(const char *format, va_list args)
 
 int	ft_printf(const char *format, ...)
 {
-	va_list		args;
-	size_t		count;
+	va_list	args;
+	int		count;
 
 	va_start(args, format);
 	count = 0;
