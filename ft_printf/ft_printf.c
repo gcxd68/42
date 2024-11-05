@@ -27,7 +27,7 @@ static int	ft_putstr_ct(const char *s)
 static int	ft_putnbr_ct(unsigned long n, char type)
 {
 	const char	*base;
-	int		count;
+	int			count;
 
 	count = 0;
 	if (type == 'i' || type == 'u')
