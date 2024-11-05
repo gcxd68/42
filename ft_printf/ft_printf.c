@@ -39,10 +39,10 @@ static size_t	ft_putnbr_ct(unsigned long n, char type)
 			n = -(long)n;
 		}
 	}
-	else if (type == 'p' || type == 'x')
-		base = "0123456789abcdef";
 	else if (type == 'X')
 		base = "0123456789ABCDEF";
+	else
+		base = "0123456789abcdef";
 	if (n >= ft_strlen(base))
 		count += ft_putnbr_ct(n / ft_strlen(base), type);
 	ft_putchar_fd(base[n % ft_strlen(base)], 1);
