@@ -32,36 +32,36 @@ static int	ft_putstr_ct(const char *s)
 	return (count);
 }
 
-static int	ft_putnbr_ct(unsigned long n, const char *format, char *base)
+static int	ft_putnbr_ct(unsigned long n, char format, char *base, int base_len)
 {
 	int			count;
 	int			ret;
 
-	if (*format == 'x')
+	if (format == 'x')
 		base = "0123456789abcdef";
-	if (*format == 'X')
+	if (format == 'X')
 		base = "0123456789ABCDEF";
 	count = 0;
-	if ((*format == 'i' || *format == 'd') && (long)n < 0)
+	if ((format == 'i') && (long)n < 0)
 	{
 		if (write(1, "-", 1) < 0)
 			return (-1);
 		count++;
 		n = -(long)n;
 	}
-	if (n >= ft_strlen(base))
+	if (n >= (unsigned long)base_len)
 	{
-		ret = ft_putnbr_ct(n / ft_strlen(base), format, base);
+		ret = ft_putnbr_ct(n / base_len, format, base, base_len);
 		if (ret < 0)
 			return (-1);
 		count += ret;
 	}
-	if (write(1, &base[n % ft_strlen(base)], 1) < 0)
+	if (write(1, &base[n % base_len], 1) < 0)
 		return (-1);
 	return (count + 1);
 }
 
-static int	ft_putptr_ct(const void *p, const char *format)
+static int	ft_putptr_ct(const void *p)
 {
 	int	count;
 
@@ -73,7 +73,7 @@ static int	ft_putptr_ct(const void *p, const char *format)
 	}
 	if (write(1, "0x", 2) < 0)
 		return (-1);
-	count = ft_putnbr_ct((unsigned long)p, format, "0123456789abcdef");
+	count = ft_putnbr_ct((unsigned long)p, 'p', "0123456789abcdef", 16);
 	if (count < 0)
 		return (-1);
 	return (count + 2);
@@ -94,11 +94,13 @@ static int	ft_format(const char *format, va_list args)
 	else if (*format == 's')
 		return (ft_putstr_ct(va_arg(args, const char *)));
 	else if (*format == 'p')
-		return (ft_putptr_ct(va_arg(args, const void *), format));
+		return (ft_putptr_ct(va_arg(args, const void *)));
 	else if (*format == 'i' || *format == 'd')
-		return (ft_putnbr_ct(va_arg(args, int), format, "0123456789"));
-	else if (*format == 'u' || *format == 'x' || *format == 'X')
-		return (ft_putnbr_ct(va_arg(args, unsigned int), format, "0123456789"));
+		return (ft_putnbr_ct(va_arg(args, int), 'i', "0123456789", 10));
+	else if (*format == 'u')
+		return (ft_putnbr_ct(va_arg(args, unsigned), 'u', "0123456789", 10));
+	else if (*format == 'x' || *format == 'X')
+		return (ft_putnbr_ct(va_arg(args, unsigned), *format, NULL, 16));
 	return (0);
 }
 
