@@ -23,9 +23,6 @@ all:			$(NAME)
 $(NAME):		$(OBJ)
 				ar -rcs $(NAME) $(OBJ)
 
-$(LIBFT):
-				$(MAKE) -C $(LIBFT_PATH) all
-
 clean:
 				rm -f $(OBJ)
 
