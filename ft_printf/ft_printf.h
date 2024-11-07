@@ -26,4 +26,5 @@
 # include <bsd/string.h>
 
 int		ft_printf(const char *format, ...);
+
 #endif
