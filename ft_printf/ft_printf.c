@@ -110,6 +110,8 @@ int	ft_printf(const char *format, ...)
 	int		count;
 	int		ret;
 
+	if (!format)
+		return (-1);
 	va_start(args, format);
 	count = 0;
 	while (*format)
