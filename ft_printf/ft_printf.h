@@ -25,6 +25,6 @@
 # include <unistd.h>
 # include <bsd/string.h>
 
-int		ft_printf(const char *format, ...) __attribute__((format(printf,1,2)));
+int	ft_printf(const char *format, ...) __attribute__((format(printf, 1, 2)));
 
 #endif
