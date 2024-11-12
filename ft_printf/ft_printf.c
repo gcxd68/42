@@ -119,6 +119,8 @@ int	ft_printf(const char *format, ...)
 		if (*format == '%')
 		{
 			format++;
+			if (*format == '\0')
+				return (va_end(args), -1);
 			ret = ft_format(format, args);
 		}
 		else
