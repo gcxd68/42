@@ -13,17 +13,8 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include <ctype.h>
-# include <limits.h>
 # include <stdarg.h>
-# include <stddef.h>
-# include <stdint.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <strings.h>
 # include <unistd.h>
-# include <bsd/string.h>
 
 int	ft_printf(const char *format, ...) __attribute__((format(printf, 1, 2)));
 
