@@ -81,26 +81,20 @@ static int	ft_putptr_ct(const void *p)
 
 static int	ft_format(const char *format, va_list args)
 {
-	if (*format == 'c' || *format == '%')
-	{
-		if (*format == 'c')
-			if (write(1, &(char){(char)va_arg(args, int)}, 1) < 0)
-				return (-1);
-		if (*format == '%')
-			if (write(1, "%", 1) < 0)
-				return (-1);
-		return (1);
-	}
+	if (*format == 'c')
+		return (write(1, &(char){(char)va_arg(args, int)}, 1));
 	else if (*format == 's')
 		return (ft_putstr_ct(va_arg(args, const char *)));
 	else if (*format == 'p')
 		return (ft_putptr_ct(va_arg(args, const void *)));
-	else if (*format == 'i' || *format == 'd')
+	else if (*format == 'd' || *format == 'i')
 		return (ft_putnbr_ct(va_arg(args, int), 'i', "0123456789", 10));
 	else if (*format == 'u')
 		return (ft_putnbr_ct(va_arg(args, unsigned), 'u', "0123456789", 10));
 	else if (*format == 'x' || *format == 'X')
 		return (ft_putnbr_ct(va_arg(args, unsigned), *format, NULL, 16));
+	else if (*format == '%')
+		return (write(1, "%", 1));
 	return (0);
 }
 
