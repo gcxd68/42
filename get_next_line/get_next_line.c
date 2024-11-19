@@ -15,14 +15,28 @@
 char	*get_next_line(int fd)
 {
 	static char buffer[BUFFER_SIZE + 1];
-	char		*line;
-	size_t		i;
+	static char	*next_line;
+	ssize_t	bytes_read;
+	size_t	i;
 
-	line = NULL;
 	i = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	
+	while (!ft_strchr(next_line, '\n')) // TANT QU'IL N'Y A PAS DE '\n' DANS next_line
+	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read = -1)
+		{
+			free (next_line);
+			next_line = NULL;
+			return (NULL);
+		}
+		if (bytes_read == 0)
+			break;
+		buffer[bytes_read] = '\0';
+		next_line = ft_strjoin(next_line, buffer);
+	}
+	return (extract_line(&next_line));	
 }
 
 int	main(void)
