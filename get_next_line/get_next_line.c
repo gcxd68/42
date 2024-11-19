@@ -14,14 +14,18 @@
 
 char	*get_next_line(int fd)
 {
-	static char buffer[BUFFER_SIZE];
+	static char buffer[BUFFER_SIZE + 1];
+	char		*line;
+	size_t		i;
 
+	line = NULL;
+	i = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	
 }
 
-int	main(void
+int	main(void)
 {
 	int		fd;
 	char	*line;
