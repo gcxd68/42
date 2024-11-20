@@ -12,31 +12,94 @@
 
 #include "get_next_line.h"
 
-char	*get_next_line(int fd)
+void	ft_bzero(void *s, size_t n)
 {
-	static char buffer[BUFFER_SIZE + 1];
-	static char	*next_line;
-	ssize_t	bytes_read;
 	size_t	i;
 
 	i = 0;
+	while (i < n)
+	{
+		((char *)s)[i] = '\0';
+		i++;
+	}
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*arr;
+
+	if (nmemb != 0 && size > SIZE_MAX / nmemb)
+		return (NULL);
+	arr = malloc(nmemb * size);
+	if (!arr)
+		return (NULL);
+	ft_bzero(arr, nmemb * size);
+	return (arr);
+}
+
+char	*extract_line(char **storage)
+{
+	char	*line;
+	char	*new_storage;
+	size_t	i;
+
+	if (!*storage || **storage == '\0')
+		return (NULL);
+	i = 0;
+	while ((*storage)[i] && (*storage)[i] != '\n')
+		i++;
+	if ((*storage)[i] == '\n')
+		line = ft_substr(*storage, 0, i + 1);
+	else
+		line = ft_substr(*storage, 0, i);
+	if (!line)
+		return (NULL);
+	if ((*storage)[i] == '\n')
+	{
+		new_storage = ft_strdup((*storage) + i + 1);
+			if (!new_storage)
+		return (NULL);
+	}
+	else
+		new_storage = NULL;
+	free(*storage);
+	*storage = new_storage;
+	return (line);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*storage;
+	char		buffer[BUFFER_SIZE + 1];
+	char		*tmp;
+	ssize_t		bytes_read;
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	while (!ft_strchr(next_line, '\n')) // TANT QU'IL N'Y A PAS DE '\n' DANS next_line
+	if (!storage)
+		storage = NULL;
+	while (!ft_strchr(storage, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read = -1)
+		if (bytes_read == -1)
 		{
-			free (next_line);
-			next_line = NULL;
+			free (storage);
+			storage = NULL;
 			return (NULL);
 		}
 		if (bytes_read == 0)
-			break;
+			break ;
 		buffer[bytes_read] = '\0';
-		next_line = ft_strjoin(next_line, buffer);
+		if (!storage)
+			storage = ft_strdup(buffer);
+		else
+		{
+		tmp = ft_strjoin(storage, buffer);
+		free(storage);
+		storage = tmp;
+		}
 	}
-	return (extract_line(&next_line));	
+	return (extract_line(&storage));
 }
 
 int	main(void)
