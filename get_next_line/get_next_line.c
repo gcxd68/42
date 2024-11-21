@@ -37,16 +37,6 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-static char	*ft_free_mem(char **storage)
-{
-	if (storage && *storage)
-	{
-		free (storage);
-		storage = NULL;
-	}
-	return (NULL);
-}
-
 static char	*ft_extract_line(char **storage)
 {
 	char	*line;
@@ -54,7 +44,11 @@ static char	*ft_extract_line(char **storage)
 	size_t	i;
 
 	if (!*storage || **storage == '\0')
-		return (ft_free_mem(storage));
+	{
+		free(*storage);
+		*storage = NULL;
+		return (NULL);
+	}
 	i = 0;
 	while ((*storage)[i] && (*storage)[i] != '\n')
 		i++;
@@ -88,7 +82,11 @@ char	*get_next_line(int fd)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-			return (ft_free_mem(&storage));
+		{
+			free (storage);
+			storage = NULL;
+			return (NULL);
+		}
 		if (bytes_read == 0)
 			break ;
 		buffer[bytes_read] = '\0';
