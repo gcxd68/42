@@ -53,23 +53,23 @@ static char	*ft_extract_line(char **storage)
 	char	*new_storage;
 	size_t	i;
 
+	if (!*storage || **storage == '\0')
+		return (ft_free_mem(storage));
 	i = 0;
 	while ((*storage)[i] && (*storage)[i] != '\n')
 		i++;
-	if ((*storage)[i] == '\n')
-		line = ft_substr(*storage, 0, i + 1);
-	else
-		line = ft_substr(*storage, 0, i);
-	if (!line)
-		return (NULL);
+	new_storage = NULL;
 	if ((*storage)[i] == '\n')
 	{
+		line = ft_substr(*storage, 0, i + 1);
 		new_storage = ft_strdup((*storage) + i + 1);
 		if (!new_storage)
 			return (NULL);
 	}
 	else
-		new_storage = NULL;
+		line = ft_substr(*storage, 0, i);
+	if (!line)
+		return (NULL);
 	free(*storage);
 	*storage = new_storage;
 	return (line);
