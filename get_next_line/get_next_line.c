@@ -72,18 +72,22 @@ static char	*ft_extract_line(char **storage)
 char	*get_next_line(int fd)
 {
 	static char	*storage = NULL;
-	static char	buffer[BUFFER_SIZE + 1];
+	char		*buffer;
 	char		*tmp;
 	ssize_t		bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buffer = malloc(BUFFER_SIZE + 1);
+	if (!buffer)
 		return (NULL);
 	while (!storage || !ft_strchr(storage, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 		{
-			free (storage);
+			free(buffer);
+			free(storage);
 			storage = NULL;
 			return (NULL);
 		}
@@ -99,5 +103,6 @@ char	*get_next_line(int fd)
 			storage = tmp;
 		}
 	}
+	free(buffer);
 	return (ft_extract_line(&storage));
 }
