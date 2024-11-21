@@ -37,14 +37,22 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-char	*extract_line(char **storage)
+static char	*ft_free_mem(char **storage)
+{
+	if (storage && *storage)
+	{
+		free (storage);
+		storage = NULL;
+	}
+	return (NULL);
+}
+
+static char	*ft_extract_line(char **storage)
 {
 	char	*line;
 	char	*new_storage;
 	size_t	i;
 
-	if (!*storage || **storage == '\0')
-		return (NULL);
 	i = 0;
 	while ((*storage)[i] && (*storage)[i] != '\n')
 		i++;
@@ -57,8 +65,8 @@ char	*extract_line(char **storage)
 	if ((*storage)[i] == '\n')
 	{
 		new_storage = ft_strdup((*storage) + i + 1);
-			if (!new_storage)
-		return (NULL);
+		if (!new_storage)
+			return (NULL);
 	}
 	else
 		new_storage = NULL;
@@ -69,24 +77,18 @@ char	*extract_line(char **storage)
 
 char	*get_next_line(int fd)
 {
-	static char	*storage;
+	static char	*storage = NULL;
 	char		buffer[BUFFER_SIZE + 1];
 	char		*tmp;
 	ssize_t		bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!storage)
-		storage = NULL;
-	while (!ft_strchr(storage, '\n'))
+	while (!storage || !ft_strchr(storage, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-		{
-			free (storage);
-			storage = NULL;
-			return (NULL);
-		}
+			return (ft_free_mem(&storage));
 		if (bytes_read == 0)
 			break ;
 		buffer[bytes_read] = '\0';
@@ -94,30 +96,10 @@ char	*get_next_line(int fd)
 			storage = ft_strdup(buffer);
 		else
 		{
-		tmp = ft_strjoin(storage, buffer);
-		free(storage);
-		storage = tmp;
+			tmp = ft_strjoin(storage, buffer);
+			free(storage);
+			storage = tmp;
 		}
 	}
-	return (extract_line(&storage));
-}
-
-int	main(void)
-{
-	int		fd;
-	char	*line;
-
-	fd = open("test.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		printf("Erreur d'ouverture du fichier texte");
-		return (1);
-	}
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		printf("%s\n", line);
-		free(line);
-	}
-	close(fd);
-	return (0);
+	return (ft_extract_line(&storage));
 }
