@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	ft_bzero(void *s, size_t n)
 {
@@ -88,7 +88,7 @@ static ssize_t	ft_append_from_fd(int fd, char **storage, char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*storage = NULL;
+	static char	*storage[1024];
 	char		*buffer;
 	ssize_t		bytes_read;
 
@@ -97,13 +97,13 @@ char	*get_next_line(int fd)
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
-	while (!storage || !ft_strchr(storage, '\n'))
+	while (!storage[fd] || !ft_strchr(storage[fd], '\n'))
 	{
-		bytes_read = ft_append_from_fd(fd, &storage, &buffer);
+		bytes_read = ft_append_from_fd(fd, &storage[fd], &buffer);
 		if (bytes_read == -1)
 			return (NULL);
 		if (bytes_read == 0)
 			break ;
 	}
-	return (free(buffer), ft_extract_line(&storage));
+	return (free(buffer), ft_extract_line(&storage[fd]));
 }
