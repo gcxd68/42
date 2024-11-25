@@ -92,7 +92,7 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	ssize_t		bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
