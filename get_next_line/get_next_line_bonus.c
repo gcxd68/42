@@ -88,7 +88,7 @@ static ssize_t	ft_append_from_fd(int fd, char **storage, char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*storage[1024];
+	static char	*storage[OPEN_MAX];
 	char		*buffer;
 	ssize_t		bytes_read;
 
