@@ -37,50 +37,50 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-static char	*ft_extract_line(char **storage)
+static char	*ft_extract_line(char **depot)
 {
 	char	*line;
-	char	*new_storage;
+	char	*new_depot;
 	size_t	i;
 
-	if (!*storage || (*storage)[0] == '\0')
-		return (free(*storage), *storage = NULL, NULL);
+	if (!*depot || (*depot)[0] == '\0')
+		return (free(*depot), *depot = NULL, NULL);
 	i = 0;
-	while ((*storage)[i] && (*storage)[i] != '\n')
+	while ((*depot)[i] && (*depot)[i] != '\n')
 		i++;
-	new_storage = NULL;
-	if ((*storage)[i] == '\n')
+	new_depot = NULL;
+	if ((*depot)[i] == '\n')
 	{
-		line = ft_substr(*storage, 0, i + 1);
-		new_storage = ft_strdup((*storage) + i + 1);
+		line = ft_substr(*depot, 0, i + 1);
+		new_depot = ft_strdup((*depot) + i + 1);
 	}
 	else
-		line = ft_substr(*storage, 0, i);
-	if (!line || (!new_storage && (*storage)[i] == '\n'))
-		return (free(*storage), *storage = NULL, NULL);
-	return (free(*storage), *storage = new_storage, line);
+		line = ft_substr(*depot, 0, i);
+	if (!line || (!new_depot && (*depot)[i] == '\n'))
+		return (free(*depot), *depot = NULL, NULL);
+	return (free(*depot), *depot = new_depot, line);
 }
 
-static ssize_t	ft_append_from_fd(int fd, char **storage, char **buffer)
+static ssize_t	ft_read_from_fd(int fd, char **depot, char **buffer)
 {
 	char	*tmp;
 	ssize_t	bytes_read;
 
 	bytes_read = read(fd, *buffer, BUFFER_SIZE);
 	if (bytes_read == -1)
-		return (free(*buffer), free(*storage), *storage = NULL, -1);
+		return (free(*buffer), free(*depot), *depot = NULL, -1);
 	if (bytes_read > 0)
 	{
 		(*buffer)[bytes_read] = '\0';
-		if (!*storage)
-			*storage = ft_strdup(*buffer);
+		if (!*depot)
+			*depot = ft_strdup(*buffer);
 		else
 		{
-			tmp = ft_strjoin(*storage, *buffer);
+			tmp = ft_strjoin(*depot, *buffer);
 			if (!tmp)
-				return (free(*buffer), free(*storage), *storage = NULL, -1);
-			free(*storage);
-			*storage = tmp;
+				return (free(*buffer), free(*depot), *depot = NULL, -1);
+			free(*depot);
+			*depot = tmp;
 		}
 	}
 	return (bytes_read);
@@ -88,7 +88,7 @@ static ssize_t	ft_append_from_fd(int fd, char **storage, char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*storage[OPEN_MAX];
+	static char	*depot[OPEN_MAX];
 	char		*buffer;
 	ssize_t		bytes_read;
 
@@ -97,13 +97,13 @@ char	*get_next_line(int fd)
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
-	while (!storage[fd] || !ft_strchr(storage[fd], '\n'))
+	while (!depot[fd] || !ft_strchr(depot[fd], '\n'))
 	{
-		bytes_read = ft_append_from_fd(fd, &storage[fd], &buffer);
+		bytes_read = ft_read_from_fd(fd, &depot[fd], &buffer);
 		if (bytes_read == -1)
 			return (NULL);
 		if (bytes_read == 0)
 			break ;
 	}
-	return (free(buffer), ft_extract_line(&storage[fd]));
+	return (free(buffer), ft_extract_line(&depot[fd]));
 }
