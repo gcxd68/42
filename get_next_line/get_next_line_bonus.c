@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdosch <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:15:45 by gdosch            #+#    #+#             */
-/*   Updated: 2024/11/18 15:15:47 by gdosch           ###   ########.fr       */
+/*   Created: 2024/11/25 09:34:53 by gdosch            #+#    #+#             */
+/*   Updated: 2024/11/25 09:34:54 by gdosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -100,7 +100,7 @@ static int	ft_parse_buffer(int fd, char *buffer, char **line)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	buffer[OPEN_MAX][BUFFER_SIZE + 1];
 	char		*line;
 	int			status;
 
@@ -111,7 +111,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	while (1)
 	{
-		status = ft_parse_buffer(fd, buffer, &line);
+		status = ft_parse_buffer(fd, buffer[fd], &line);
 		if (status == 0)
 			break ;
 		if (status == -1)
