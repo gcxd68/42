@@ -12,17 +12,26 @@
 
 #include "get_next_line.h"
 
-char	*ft_strchr(const char *s, int c)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	while (*s)
+	unsigned char		*d;
+	const unsigned char	*s;
+
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	if (d < s || d >= s + n)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
+		while (n--)
+			*d++ = *s++;
 	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
+	else
+	{
+		d = d + n - 1;
+		s = s + n - 1;
+		while (n--)
+			*d-- = *s--;
+	}
+	return (dest);
 }
 
 size_t	ft_strlen(const char *s)

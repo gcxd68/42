@@ -37,69 +37,70 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-static char	*ft_extract_line(char **depot)
+static int	ft_extract_line(char **line, char *buffer)
 {
-	char	*line;
-	char	*new_depot;
+	char	*tmp;
+	char	*substr;
 	size_t	i;
 
-	if (!*depot || (*depot)[0] == '\0')
-		return (free(*depot), *depot = 0, NULL);
+//	if (!buffer || buffer[0] == '\0')
+//		return (free(*line), *line = 0, -1);
 	i = 0;
-	while ((*depot)[i] && (*depot)[i] != '\n')
+	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	line = ft_substr(*depot, 0, i + ((*depot)[i] == '\n'));
-	new_depot = 0;
-	if ((*depot)[i] == '\n')
-		new_depot = ft_strdup((*depot) + i + 1);
-	if (!line || (!new_depot && (*depot)[i] == '\n'))
-		return (free(*depot), *depot = 0, NULL);
-	return (free(*depot), *depot = new_depot, line);
+	substr = ft_substr(buffer, 0, i + (buffer[i] == '\n'));
+	if (!substr)
+		return (free(*line), *line = 0, -1);
+	tmp = ft_strjoin(*line, substr);
+	free(substr);
+	if (!tmp)
+		return (free(*line), *line = 0, -1);
+	free(*line);
+	*line = tmp;
+	if (buffer[i] == '\n')
+		ft_memmove(buffer, buffer + i + 1, ft_strlen(buffer) - i);
+	else
+		(buffer[0] = '\0');
+	return (0);
 }
 
-static ssize_t	ft_read_from_fd(int fd, char **depot)
+static ssize_t	ft_read_from_fd(int fd, char *buffer, char **line)
 {
-	char	*buffer;
-	char	*tmp;
-	ssize_t	bytes_read;
+	ssize_t		bytes_read;
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (free(*depot), *depot = 0, -1);
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read == -1)
-		return (free(buffer), free(*depot), *depot = 0, -1);
+		return (free(*line), *line = 0, -1);
 	if (bytes_read > 0)
-	{
-		(buffer)[bytes_read] = '\0';
-		if (!*depot)
-			*depot = ft_strdup(buffer);
-		else
-		{
-			tmp = ft_strjoin(*depot, buffer);
-			free(*depot);
-			if (!tmp)
-				return (free(buffer), *depot = 0, -1);
-			*depot = tmp;
-		}
-	}
-	return (free(buffer), bytes_read);
+		buffer[bytes_read] = '\0';
+	return (bytes_read);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*depot = 0;
+	static char	buffer[BUFFER_SIZE + 1];
+	char		*line;
 	ssize_t		bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
-		return (free(depot), depot = 0, NULL);
-	while (!depot || !ft_strchr(depot, '\n'))
+		return (NULL);
+	line = ft_strdup("");
+	if (!line)
+		return (NULL);
+	while (1)
 	{
-		bytes_read = ft_read_from_fd(fd, &depot);
-		if (bytes_read == -1)
+		if (buffer[0] == '\0')
+		{
+			bytes_read = ft_read_from_fd(fd, buffer, &line);
+			if (bytes_read == 0)
+				break ;
+			if (bytes_read == -1)
+				return (NULL);
+		}
+		if (ft_extract_line(&line, buffer) < 0)
 			return (NULL);
-		if (bytes_read == 0)
-			break ;
 	}
-	return (ft_extract_line(&depot));
+	if (!*line)
+		return (free(line), line = 0, NULL);
+	return (line);
 }
