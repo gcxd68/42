@@ -13,17 +13,21 @@
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
 
-# include <stdint.h>
-# include <stdlib.h>
-# include <unistd.h>
-
+# define MAX_BUFFER_SIZE 1048576
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
+# elif BUFFER_SIZE > MAX_BUFFER_SIZE
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE MAX_BUFFER_SIZE
 # endif
 
 # ifndef OPEN_MAX
-#  define OPEN_MAX 512
+#  define OPEN_MAX 1024
 # endif
+
+# include <stdint.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 char	*get_next_line(int fd);
 
