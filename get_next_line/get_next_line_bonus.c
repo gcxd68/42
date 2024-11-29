@@ -104,7 +104,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			status;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1 || fd >= OPEN_MAX)
 		return (NULL);
 	line = ft_strdup("");
 	if (!line)
