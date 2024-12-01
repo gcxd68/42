@@ -31,17 +31,17 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-static	void	*free_depot(char **depot)
+static	void	*clear_arr(char **arr)
 {
 	int	i;
 
 	i = 0;
 	while (i < OPEN_MAX)
 	{
-		if (depot[i])
+		if (arr[i])
 		{
-			free(depot[i]);
-			depot[i] = NULL;
+			free(arr[i]);
+			arr[i] = NULL;
 		}
 		i++;
 	}
@@ -60,11 +60,13 @@ static char	*ft_extract_line(char **depot)
 	while ((*depot)[i] && (*depot)[i] != '\n')
 		i++;
 	line = ft_substr(*depot, 0, i + ((*depot)[i] == '\n'));
+	if (!line)
+		return (free(*depot), *depot = 0, NULL);
 	new_depot = 0;
 	if ((*depot)[i] == '\n')
 		new_depot = ft_strdup((*depot) + i + 1);
-	if (!line || (!new_depot && (*depot)[i] == '\n'))
-		return (free(*depot), *depot = 0, NULL);
+	if ((*depot)[i] == '\n' && !new_depot)
+		return (free(*depot), *depot = 0, free(line), line = 0, NULL);
 	return (free(*depot), *depot = new_depot, line);
 }
 
@@ -103,7 +105,7 @@ char	*get_next_line(int fd)
 	ssize_t		bytes_read;
 
 	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE < 1)
-		return (free_depot(depot));
+		return (clear_arr(depot));
 	while (!depot[fd] || !ft_strchr(depot[fd], '\n'))
 	{
 		bytes_read = ft_parse_data(fd, &depot[fd]);
