@@ -78,7 +78,7 @@ static int	ft_extract_line(char **line, char *buffer)
 	return (0);
 }
 
-static int	ft_parse_buffer(int fd, char *buffer, char **line)
+static ssize_t	ft_parse_data(int fd, char *buffer, char **line)
 {
 	ssize_t	bytes_read;
 
@@ -111,7 +111,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	while (1)
 	{
-		status = ft_parse_buffer(fd, buffer, &line);
+		status = ft_parse_data(fd, buffer, &line);
 		if (status == 0)
 			break ;
 		if (status == -1)

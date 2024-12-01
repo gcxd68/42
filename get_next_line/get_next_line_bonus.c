@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdosch <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/29 11:30:52 by gdosch            #+#    #+#             */
-/*   Updated: 2024/11/29 11:30:54 by gdosch           ###   ########.fr       */
+/*   Created: 2024/11/25 09:34:53 by gdosch            #+#    #+#             */
+/*   Updated: 2024/11/25 09:34:54 by gdosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,93 +31,86 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+static	void	*free_depot(char **depot)
 {
-	unsigned char		*d;
-	const unsigned char	*s;
-
-	d = (unsigned char *)dest;
-	s = (const unsigned char *)src;
-	if (d < s || d >= s + n)
-	{
-		while (n--)
-			*d++ = *s++;
-	}
-	else
-	{
-		d = d + n - 1;
-		s = s + n - 1;
-		while (n--)
-			*d-- = *s--;
-	}
-	return (dest);
-}
-
-static int	ft_extract_line(char **line, char *buffer)
-{
-	char	*tmp;
-	char	*substr;
-	size_t	i;
+	int	i;
 
 	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
+	while (i < OPEN_MAX)
+	{
+		if (depot[i])
+		{
+			free(depot[i]);
+			depot[i] = NULL;
+		}
 		i++;
-	substr = ft_substr(buffer, 0, i + (buffer[i] == '\n'));
-	if (!substr)
-		return (free(*line), *line = 0, -1);
-	tmp = ft_strjoin(*line, substr);
-	free(substr);
-	if (!tmp)
-		return (free(*line), *line = 0, -1);
-	free(*line);
-	*line = tmp;
-	if (buffer[i] == '\n')
-		ft_memmove(buffer, buffer + i + 1, ft_strlen(buffer) - i);
-	else
-		(buffer[0] = '\0');
-	return (0);
+	}
+	return (NULL);
 }
 
-static int	ft_parse_buffer(int fd, char *buffer, char **line)
+static char	*ft_extract_line(char **depot)
 {
+	char	*line;
+	char	*new_depot;
+	size_t	i;
+
+	if (!*depot || (*depot)[0] == '\0')
+		return (free(*depot), *depot = 0, NULL);
+	i = 0;
+	while ((*depot)[i] && (*depot)[i] != '\n')
+		i++;
+	line = ft_substr(*depot, 0, i + ((*depot)[i] == '\n'));
+	new_depot = 0;
+	if ((*depot)[i] == '\n')
+		new_depot = ft_strdup((*depot) + i + 1);
+	if (!line || (!new_depot && (*depot)[i] == '\n'))
+		return (free(*depot), *depot = 0, NULL);
+	return (free(*depot), *depot = new_depot, line);
+}
+
+static ssize_t	ft_parse_data(int fd, char **depot)
+{
+	char	*buffer;
+	char	*tmp;
 	ssize_t	bytes_read;
 
-	if (buffer[0] == '\0')
+	buffer = malloc(BUFFER_SIZE + 1);
+	if (!buffer)
+		return (free(*depot), *depot = 0, -1);
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read == -1)
+		return (free(buffer), free(*depot), *depot = 0, -1);
+	if (bytes_read > 0)
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-			return (free(*line), *line = 0, -1);
-		if (bytes_read == 0)
-			return (0);
-		buffer[bytes_read] = '\0';
+		(buffer)[bytes_read] = '\0';
+		if (!*depot)
+			*depot = ft_strdup(buffer);
+		else
+		{
+			tmp = ft_strjoin(*depot, buffer);
+			free(*depot);
+			*depot = tmp;
+			if (!*depot)
+				return (free(buffer), -1);
+		}
 	}
-	if (ft_extract_line(line, buffer) < 0)
-		return (-1);
-	if (ft_strchr(*line, '\n'))
-		return (0);
-	return (1);
+	return (free(buffer), bytes_read);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[OPEN_MAX][BUFFER_SIZE + 1];
-	char		*line;
-	int			status;
+	static char	*depot[OPEN_MAX];
+	ssize_t		bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || fd >= OPEN_MAX)
-		return (NULL);
-	line = ft_strdup("");
-	if (!line)
-		return (NULL);
-	while (1)
+	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE < 1)
+		return (free_depot(depot));
+	while (!depot[fd] || !ft_strchr(depot[fd], '\n'))
 	{
-		status = ft_parse_buffer(fd, buffer[fd], &line);
-		if (status == 0)
+		bytes_read = ft_parse_data(fd, &depot[fd]);
+		if (bytes_read == 0)
 			break ;
-		if (status == -1)
+		if (bytes_read == -1)
 			return (NULL);
 	}
-	if (!*line)
-		return (free(line), line = 0, NULL);
-	return (line);
+	return (ft_extract_line(&depot[fd]));
 }
