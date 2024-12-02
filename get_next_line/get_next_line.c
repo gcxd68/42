@@ -46,22 +46,22 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 static int	ft_build_line(char **line, char *buffer)
 {
 	char	*tmp;
+	size_t	line_len;
 	size_t	i;
 
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	tmp = ft_calloc(ft_strlen(*line) + i + (buffer[i] == '\n') + 1, 1);
+	line_len = ft_strlen(*line);
+	tmp = malloc(line_len + i + (buffer[i] == '\n') + 1);
 	if (!tmp)
 		return (free(*line), *line = 0, -1);
 	if (*line)
-		ft_memcpy(tmp, *line, ft_strlen(*line));
-	ft_memcpy(tmp + ft_strlen(*line), buffer, i + (buffer[i] == '\n'));
-	tmp[ft_strlen(*line) + i + (buffer[i] == '\n')] = '\0';
+		ft_memcpy(tmp, *line, line_len);
+	ft_memcpy(tmp + line_len, buffer, i + (buffer[i] == '\n'));
+	tmp[line_len + i + (buffer[i] == '\n')] = '\0';
 	free(*line);
 	*line = tmp;
-	if (!*line)
-		return (free(tmp), tmp = 0, -1);
 	if (buffer[i] == '\n')
 		ft_memcpy(buffer, buffer + i + 1, ft_strlen(buffer) - i);
 	else
