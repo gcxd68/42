@@ -31,48 +31,39 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	unsigned char		*d;
 	const unsigned char	*s;
 
 	d = (unsigned char *)dest;
 	s = (const unsigned char *)src;
-	if (d < s || d >= s + n)
-	{
-		while (n--)
-			*d++ = *s++;
-	}
-	else
-	{
-		d = d + n - 1;
-		s = s + n - 1;
-		while (n--)
-			*d-- = *s--;
-	}
+	while (n--)
+		*d++ = *s++;
 	return (dest);
 }
 
-static int	ft_extract_line(char **line, char *buffer)
+static int	ft_build_line(char **line, char *buffer)
 {
 	char	*tmp;
-	char	*substr;
 	size_t	i;
 
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	substr = ft_substr(buffer, 0, i + (buffer[i] == '\n'));
-	if (!substr)
-		return (free(*line), *line = 0, -1);
-	tmp = ft_strjoin(*line, substr);
-	free(substr);
+	tmp = ft_calloc(ft_strlen(*line) + i + (buffer[i] == '\n') + 1, 1);
 	if (!tmp)
 		return (free(*line), *line = 0, -1);
+	if (*line)
+		ft_memcpy(tmp, *line, ft_strlen(*line));
+	ft_memcpy(tmp + ft_strlen(*line), buffer, i + (buffer[i] == '\n'));
+	tmp[ft_strlen(*line) + i + (buffer[i] == '\n')] = '\0';
 	free(*line);
 	*line = tmp;
+	if (!*line)
+		return (free(tmp), tmp = 0, -1);
 	if (buffer[i] == '\n')
-		ft_memmove(buffer, buffer + i + 1, ft_strlen(buffer) - i);
+		ft_memcpy(buffer, buffer + i + 1, ft_strlen(buffer) - i);
 	else
 		(buffer[0] = '\0');
 	return (0);
@@ -91,7 +82,7 @@ static ssize_t	ft_parse_data(int fd, char *buffer, char **line)
 			return (0);
 		buffer[bytes_read] = '\0';
 	}
-	if (ft_extract_line(line, buffer) < 0)
+	if (ft_build_line(line, buffer) < 0)
 		return (-1);
 	if (ft_strchr(*line, '\n'))
 		return (0);
