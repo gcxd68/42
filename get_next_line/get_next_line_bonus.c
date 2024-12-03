@@ -12,54 +12,25 @@
 
 #include "get_next_line_bonus.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	void	*arr;
-	size_t	i;
-
-	if (nmemb != 0 && size > SIZE_MAX / nmemb)
-		return (NULL);
-	arr = malloc(nmemb * size);
-	if (!arr)
-		return (NULL);
-	i = 0;
-	while (i < (nmemb * size))
-	{
-		((char *)arr)[i] = '\0';
-		i++;
-	}
-	return (arr);
-}
-
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	unsigned char		*d;
-	const unsigned char	*s;
-
-	d = (unsigned char *)dest;
-	s = (const unsigned char *)src;
-	while (n--)
-		*d++ = *s++;
-	return (dest);
-}
-
 static int	ft_build_line(char **line, char *buffer)
 {
 	char	*tmp;
 	size_t	line_len;
+	size_t	chunk_len;
 	size_t	i;
 
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	line_len = ft_strlen(*line);
-	tmp = malloc(line_len + i + (buffer[i] == '\n') + 1);
+	chunk_len = i + (buffer[i] == '\n');
+	tmp = malloc(line_len + chunk_len + 1);
 	if (!tmp)
 		return (free(*line), *line = 0, -1);
 	if (*line)
 		ft_memcpy(tmp, *line, line_len);
-	ft_memcpy(tmp + line_len, buffer, i + (buffer[i] == '\n'));
-	tmp[line_len + i + (buffer[i] == '\n')] = '\0';
+	ft_memcpy(tmp + line_len, buffer, chunk_len);
+	tmp[line_len + chunk_len] = '\0';
 	free(*line);
 	*line = tmp;
 	if (buffer[i] == '\n')
