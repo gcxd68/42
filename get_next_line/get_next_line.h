@@ -24,8 +24,6 @@
 char	*get_next_line(int fd);
 
 void	*ft_memcpy(void *dest, const void *src, size_t n);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(char *s);
 size_t	ft_strlen(const char *s);
 
 #endif

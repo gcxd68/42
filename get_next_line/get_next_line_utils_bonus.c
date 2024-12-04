@@ -24,34 +24,6 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strchr(const char *s, int c)
-{
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
-}
-
-char	*ft_strdup(char *s)
-{
-	char	*dup;
-	char	*ptr;
-
-	dup = (char *)malloc(1 * (ft_strlen(s) + 1));
-	if (!dup)
-		return (NULL);
-	ptr = dup;
-	while (*s)
-		*dup++ = *s++;
-	*dup = '\0';
-	return (ptr);
-}
-
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
