@@ -38,18 +38,17 @@ static ssize_t	ft_build_line(char **line, char **buffer)
 
 static ssize_t	ft_parse_data(int fd, char *buffer, char **line)
 {
-	ssize_t	bytes_read;
 	ssize_t	ret;
 
 	if (!*buffer)
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read <= 0)
-			return (bytes_read);
-		buffer[bytes_read] = '\0';
+		ret = read(fd, buffer, BUFFER_SIZE);
+		if (ret <= 0)
+			return (ret);
+		buffer[ret] = '\0';
 	}
 	ret = ft_build_line(line, &buffer);
-	if (ret == -1)
+	if (ret < 0)
 		return (-1);
 	if (buffer[ret] == '\0')
 		return (((*buffer) = '\0'), 1);
