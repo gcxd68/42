@@ -26,6 +26,7 @@
 
 int		ft_atoi(const char *nptr);
 void	*ft_calloc(size_t nmemb, size_t size);
+int     ft_isdigit(int c);
 int		ft_printf(const char *format, ...);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*get_next_line(int fd);
