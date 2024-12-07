@@ -137,8 +137,6 @@ size_t	ft_stdin(int *a, int *b, size_t *size_a)
 			ft_rx(a, size_a);
 			ft_rx(b, &size_b);
 		}
-		else if (ft_strncmp(line, "rb\n", 3) == 0)
-			ft_rx(b, &size_b);
 		else if (ft_strncmp(line, "rra\n", 4) == 0)
 			ft_rrx(a, size_a);
 		else if (ft_strncmp(line, "rrb\n", 4) == 0)
