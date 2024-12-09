@@ -12,6 +12,33 @@
 
 #include "checker.h"
 
+void	ft_cleanup(int *arr1, int *arr2, char msg)
+{
+	int	status;
+
+	status = 0;
+	if (msg == 'e')
+	{
+		ft_printf("Error\n");
+		status = 1;
+	}
+	if (msg == 'o')
+		ft_printf("OK\n");
+	if (msg == 'k')
+		ft_printf("KO\n");
+	if (arr1)
+	{
+		free(arr1);
+		arr1 = 0;
+	}
+	if (arr2)
+	{
+		free(arr2);
+		arr2 = 0;
+	}
+	exit(status);
+}
+
 int	ft_atoi_psc(const char *nptr, int *arr)
 {
 	unsigned long long	res;
@@ -28,83 +55,77 @@ int	ft_atoi_psc(const char *nptr, int *arr)
 	while (*nptr >= '0' && *nptr <= '9')
 	{
 		res = res * 10 + *nptr - '0';
-		if ((sign == 1 && res > (unsigned)INT_MAX) || (sign == -1 && res > (unsigned)(-(long)INT_MIN)))
-		{
-			ft_printf("Error\n");
-			free(arr);
-			arr = 0;
-			exit (1);
-		}
+		if ((sign == 1 && res > (unsigned)INT_MAX)
+			|| (sign == -1 && res > (unsigned)(-(long)INT_MIN)))
+			ft_cleanup(arr, NULL, 'e');
 		nptr++;
 	}
 	if (ft_isdigit(*nptr) == 0 && *nptr != '\0')
-	{
-		ft_printf("Error\n");
-		free(arr);
-		arr = 0;
-		exit (1);
-	}
+		ft_cleanup(arr, NULL, 'e');
 	return ((int)res * sign);
 }
 
-void	ft_sx(int *arr)
+size_t	ft_find_size(int argc, char **argv)
 {
-	int	tmp;
-
-	tmp = arr[0];
-	arr[0] = arr[1];
-	arr[1] = tmp;
-}
-
-void	ft_px(int *arr1, int *arr2, size_t *size_a1, size_t *size_a2)
-{
+	char	*strchr;
 	size_t	i;
+	size_t	j;
 
-	i = *size_a1;
-	while (i > 0)
-	{
-		arr1[i] = arr1[i - 1];
-		i--;
-	}
-	arr1[0] = arr2[0];
 	i = 0;
-	while (i < *size_a2 - 1)
+	j = 0;
+	if (argc < 2)
+		return (1);
+	while (i < (size_t)(argc - 1))
 	{
-		arr2[i] = arr2[i + 1];
+		strchr = ft_strchr(argv[i + 1], ' ');
+		while (strchr)
+		{
+			while (strchr[0] == ' ')
+				strchr++;
+			strchr = ft_strchr(strchr + 1, ' ');
+			j++;
+		}
 		i++;
 	}
-	*size_a1 += 1;
-	*size_a2 -= 1;
+	return (i + j);
 }
 
-void	ft_rx(int *arr, size_t *size)
+int	*ft_fill_arr(int argc, char **argv, size_t size_a)
 {
-	int		tmp;
+	char	**split_res;
+	int		*arr;
 	size_t	i;
+	size_t	j;
+	size_t	k;
 
-	tmp = arr[0];
 	i = 0;
-	while (i < *size - 1)
+	k = 0;
+	arr = ft_calloc(size_a, sizeof(int));
+	if (!arr)
+		ft_cleanup(NULL, NULL, 'e');
+	while (i < (size_t)(argc - 1))
 	{
-		arr[i] = arr[i + 1];
+		if (ft_strchr(argv[i + 1], ' '))
+		{
+			split_res = ft_split(argv[i + 1], ' ');
+			if (!split_res)
+				ft_cleanup(arr, NULL, 'e');
+			j = 0;
+			while (split_res[j])
+			{
+				arr[i + k] = ft_atoi_psc(split_res[j], arr);
+				free(split_res[j]);
+				j++;
+				if (split_res[j])
+					k++;
+			}
+			free(split_res);
+		}
+		else
+			arr[i + k] = ft_atoi_psc(argv[i + 1], arr);
 		i++;
 	}
-	arr[i] = tmp;
-}
-
-void	ft_rrx(int *arr, size_t *size)
-{
-	int		tmp;
-	size_t	i;
-
-	i = *size - 1;
-	tmp = arr[i];
-	while (i > 0)
-	{
-		arr[i] = arr[i - 1];
-		i--;
-	}
-	arr[0] = tmp;
+	return (arr);
 }
 
 size_t	ft_stdin(int *a, int *b, size_t *size_a)
@@ -113,16 +134,17 @@ size_t	ft_stdin(int *a, int *b, size_t *size_a)
 	size_t	size_b;
 
 	size_b = 0;
-	while ((line = get_next_line(0)))
+	line = get_next_line(0);
+	while (line)
 	{
 		if (ft_strncmp(line, "sa\n", 3) == 0)
-			ft_sx(a);
+			ft_sx(a, size_a);
 		else if (ft_strncmp(line, "sb\n", 3) == 0)
-			ft_sx(b);
+			ft_sx(b, &size_b);
 		else if (ft_strncmp(line, "ss\n", 3) == 0)
 		{
-			ft_sx(a);
-			ft_sx(b);
+			ft_sx(a, size_a);
+			ft_sx(b, &size_b);
 		}
 		else if (ft_strncmp(line, "pa\n", 3) == 0)
 			ft_px(a, b, size_a, &size_b);
@@ -147,87 +169,52 @@ size_t	ft_stdin(int *a, int *b, size_t *size_a)
 			ft_rrx(b, &size_b);
 		}
 		else
-		{
-			ft_printf("Error\n");
-			free(a);
-			a = 0;
-			free(b);
-			b = 0;
-			exit (1);
-		}
+			ft_cleanup(a, b, 'e');
 		free(line);
+		line = get_next_line(0);
 	}
 	return (size_b);
 }
 
-int	main(int argc, char *argv[])
+void	ft_read_check(int *a, size_t *size_a)
 {
-	int	*a;
-	int	*b;
-	size_t	size_a;
+	int		*b;
 	size_t	size_b;
 	size_t	i;
 	size_t	j;
 
-	size_a = argc - 1;
-	if (argc < 2)
-		return (1);
-
-	a = ft_calloc(size_a, sizeof(int));
-	if (!a)
-		return (1);
-
 	i = 0;
-	while (i < size_a)
-	{
-		a[i] = ft_atoi_psc(argv[i + 1], a);
-		i++;
-	}
-
-	i = 0;
-	while (i < size_a - 1)
+	j = 0;
+	while (i < *size_a - 1)
 	{
 		j = i + 1;
-		while (j < size_a)
+		while (j < *size_a)
 		{
 			if (a[i] == a[j])
-				return (ft_printf("Error\n"), free(a), a = 0, 1);
+				ft_cleanup(a, NULL, 'e');
 			j++;
 		}
 		i++;
 	}
-	
-	b = ft_calloc(size_a, sizeof(int));
+	b = ft_calloc(*size_a, sizeof(int));
 	if (!b)
-		return (free(a), a = 0, 1);
-
-	size_b = ft_stdin(a, b, &size_a);
-
+		ft_cleanup(a, NULL, 'e');
+	size_b = ft_stdin(a, b, size_a);
 	i = 0;
-	ft_printf("\n");
-	ft_printf("PILE A\n");
-	while (i < size_a)
-	{
-		ft_printf("Ligne %i : %i\n", i, a[i]);
+	while (i < *size_a - 1 && a[i] < a[i + 1])
 		i++;
-	}
-	i = 0;
-	ft_printf("\n");
-	ft_printf("PILE B\n");
-	while (i < size_b)
-	{
-		ft_printf("Ligne %i : %i\n", i, b[i]);
-		i++;
-	}
+	if (i == *size_a - 1 && size_b == 0)
+		ft_cleanup(a, b, 'o');
+	ft_cleanup(a, b, 'k');
+}
 
-	ft_printf("\n");
+int	main(int argc, char *argv[])
+{
+	int		*a;
+	size_t	size_a;
 
-	i = 0;
-	if (size_b != 0)
-		return (ft_printf("KO\n"), free(a), a = 0, free(b), b = 0, 0);
-	while (i < size_a - 1 && a[i] < a[i + 1])
-			i++;
-	if (i == size_a - 1)
-		return (ft_printf("OK\n"), free(a), a = 0, free(b), b = 0, 0);
-	return (ft_printf("KO\n"), free(a), a = 0, free(b), b = 0, 0);
+	size_a = ft_find_size(argc, argv);
+	a = ft_fill_arr(argc, argv, size_a);
+	ft_read_check(a, &size_a);
+	return (0);
 }

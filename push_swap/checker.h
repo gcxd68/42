@@ -24,10 +24,16 @@
 # include <unistd.h>
 # include <bsd/string.h>
 
-int		ft_atoi(const char *nptr);
+void	ft_sx(int *arr, size_t *size);
+void	ft_px(int *arr1, int *arr2, size_t *size_a1, size_t *size_a2);
+void	ft_rx(int *arr, size_t *size);
+void	ft_rrx(int *arr, size_t *size);
+
 void	*ft_calloc(size_t nmemb, size_t size);
-int     ft_isdigit(int c);
+int		ft_isdigit(int c);
 int		ft_printf(const char *format, ...);
+char	**ft_split(char const *s, char c);
+char	*ft_strchr(const char *s, int c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*get_next_line(int fd);
 
