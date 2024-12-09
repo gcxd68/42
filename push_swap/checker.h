@@ -28,6 +28,9 @@ void	ft_sx(int *arr, size_t *size);
 void	ft_px(int *arr1, int *arr2, size_t *size_a1, size_t *size_a2);
 void	ft_rx(int *arr, size_t *size);
 void	ft_rrx(int *arr, size_t *size);
+void	ft_ss(int *a, int *b, size_t *size_a, size_t *size_b);
+void	ft_rr(int *a, int *b, size_t *size_a, size_t *size_b);
+void	ft_rrr(int *a, int *b, size_t *size_a, size_t *size_b);
 
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_isdigit(int c);
