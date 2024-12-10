@@ -79,21 +79,3 @@ void	ft_rrx(int *arr, size_t *size)
 	}
 	arr[0] = tmp;
 }
-
-void	ft_ss(int *a, int *b, size_t *size_a, size_t *size_b)
-{
-	ft_sx(a, size_a);
-	ft_sx(b, size_b);
-}
-
-void	ft_rr(int *a, int *b, size_t *size_a, size_t *size_b)
-{
-	ft_rx(a, size_a);
-	ft_rx(b, size_b);
-}
-
-void	ft_rrr(int *a, int *b, size_t *size_a, size_t *size_b)
-{
-	ft_rrx(a, size_a);
-	ft_rrx(b, size_b);
-}
