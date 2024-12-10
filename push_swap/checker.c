@@ -12,14 +12,12 @@
 
 #include "checker.h"
 
-size_t static	ft_find_size(int argc, char **argv)
+static size_t	ft_find_size(int argc, char **argv)
 {
 	char	*str;
 	size_t	i;
 	size_t	j;
 
-	if (argc < 2)
-		return (1);
 	i = 0;
 	j = 0;
 	while (i < (size_t)(argc - 1))
@@ -39,7 +37,7 @@ size_t static	ft_find_size(int argc, char **argv)
 	return (j);
 }
 
-void static	ft_dupcheck(int *a, size_t size_a)
+static void	ft_dupcheck(int **stack, size_t size_a)
 {
 	size_t	i;
 	size_t	j;
@@ -51,43 +49,46 @@ void static	ft_dupcheck(int *a, size_t size_a)
 		j = i + 1;
 		while (j < size_a)
 		{
-			if (a[i] == a[j])
-				ft_cleanup(a, NULL, 'e');
+			if (stack[0][i] == stack[0][j])
+				ft_cleanup(stack, 'e');
 			j++;
 		}
 		i++;
 	}
 }
 
-void static	ft_check_arr(int *a, int *b, size_t *size)
+static void	ft_check_arr(int **stack, size_t *size)
 {
 	size_t	i;
 
+	if (!stack || !stack[0] || size[0] == 0)
+		ft_cleanup(stack, 'e');
 	i = 0;
-	while (i < size[0] - 1 && a[i] < a[i + 1])
+	while (i < size[0] - 1 && stack[0][i] < stack[0][i + 1])
 		i++;
 	if (i == size[0] - 1 && size[1] == 0)
-		ft_cleanup(a, b, 'o');
-	ft_cleanup(a, b, 'k');
+		ft_cleanup(stack, 'o');
+	ft_cleanup(stack, 'k');
 }
 
 int	main(int argc, char *argv[])
 {
-	int		*a;
-	int		*b;
+	int		*stack[2];
 	size_t	size[2];
 
+	if (argc < 2)
+		return (0);
 	size[0] = ft_find_size(argc, argv);
-	a = ft_calloc(size[0], sizeof(int));
-	if (!a)
-		ft_cleanup(NULL, NULL, 'e');
-	ft_fill_arr(argc, argv, a);
-	ft_dupcheck(a, size[0]);
-	b = ft_calloc(size[0], sizeof(int));
-	if (!b)
-		ft_cleanup(a, NULL, 'e');
+	stack[0] = ft_calloc(size[0], sizeof(int));
+	if (!stack[0])
+		ft_cleanup(NULL, 'e');
+	ft_fill_arr(argc, argv, stack);
+	ft_dupcheck(stack, size[0]);
+	stack[1] = ft_calloc(size[0], sizeof(int));
+	if (!stack[1])
+		ft_cleanup(stack, 'e');
 	size[1] = 0;
-	ft_exec_ops(a, b, size);
-	ft_check_arr(a, b, size);
+	ft_exec_ops(stack, size);
+	ft_check_arr(stack, size);
 	return (0);
 }

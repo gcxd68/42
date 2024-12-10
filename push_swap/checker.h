@@ -12,21 +12,13 @@
 
 #ifndef CHECKER_H
 # define CHECKER_H
-# include <ctype.h>
-# include <limits.h>
-# include <stdarg.h>
-# include <stddef.h>
-# include <stdint.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <strings.h>
-# include <unistd.h>
-# include <bsd/string.h>
 
-void	ft_fill_arr(int argc, char **argv, int *a);
-void	ft_exec_ops(int *a, int *b, size_t *size);
-void	ft_cleanup(int *arr1, int *arr2, char msg);
+# include <limits.h>
+# include <stdlib.h>
+
+void	ft_fill_arr(int argc, char **argv, int **stack);
+void	ft_exec_ops(int **stack, size_t *size);
+void	ft_cleanup(int **arr, char msg);
 
 void	ft_sx(int *arr, size_t *size);
 void	ft_px(int *arr1, int *arr2, size_t *size_a1, size_t *size_a2);
