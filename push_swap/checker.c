@@ -16,10 +16,10 @@ static size_t	ft_find_size(int argc, char **argv)
 {
 	char	*str;
 	size_t	i;
-	size_t	j;
+	size_t	size;
 
 	i = 0;
-	j = 0;
+	size = 0;
 	while (i < (size_t)(argc - 1))
 	{
 		str = argv[i + 1];
@@ -28,13 +28,13 @@ static size_t	ft_find_size(int argc, char **argv)
 			while (*str == ' ')
 				str++;
 			if (*str)
-				j++;
+				size++;
 			while (*str && *str != ' ')
 				str++;
 		}
 		i++;
 	}
-	return (j);
+	return (size);
 }
 
 static void	ft_dupcheck(int **stack, size_t size_a)
@@ -61,7 +61,7 @@ static void	ft_check_arr(int **stack, size_t *size)
 {
 	size_t	i;
 
-	if (!stack || !stack[0] || size[0] == 0)
+	if (!stack || !stack[0])
 		ft_cleanup(stack, 'e');
 	i = 0;
 	while (i < size[0] - 1 && stack[0][i] < stack[0][i + 1])

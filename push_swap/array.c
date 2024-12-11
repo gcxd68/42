@@ -65,41 +65,30 @@ static int	ft_atoi_ps(const char *nptr, int **stack)
 	return ((int)res * sign);
 }
 
-static void	ft_process_split(char **split_res, int **stack, size_t *i, size_t *j)
-{
-	size_t	k;
-
-	k = 0;
-	while (split_res[k])
-	{
-		stack[0][*i + *j] = ft_atoi_ps(split_res[k], stack);
-		free(split_res[k]);
-		k++;
-		if (split_res[k])
-			(*j)++;
-	}
-}
-
 void	ft_fill_arr(int argc, char **argv, int **stack)
 {
 	char	**split_res;
 	size_t	i;
 	size_t	j;
+	size_t	k;
 
 	i = 0;
 	j = 0;
 	while (i < (size_t)(argc - 1))
 	{
-		if (ft_strchr(argv[i + 1], ' '))
+		split_res = ft_split(argv[i + 1], ' ');
+		if (!split_res)
+			ft_cleanup(stack, 'e');
+		k = 0;
+		while (split_res[k])
 		{
-			split_res = ft_split(argv[i + 1], ' ');
-			if (!split_res)
-				ft_cleanup(stack, 'e');
-			ft_process_split(split_res, stack, &i, &j);
-			free(split_res);
+			stack[0][i + j] = ft_atoi_ps(split_res[k], stack);
+			free(split_res[k]);
+			k++;
+			if (split_res[k])
+				j++;
 		}
-		else
-			stack[0][i + j] = ft_atoi_ps(argv[i + 1], stack);
+		free(split_res);
 		i++;
 	}
 }

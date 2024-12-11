@@ -12,11 +12,11 @@
 
 #include "checker.h"
 
-void	ft_sx(int *arr, size_t *size)
+void	ft_sx(int *arr, size_t size)
 {
 	int	tmp;
 
-	if (*size < 2)
+	if (size < 2)
 		return ;
 	tmp = arr[0];
 	arr[0] = arr[1];
@@ -46,16 +46,16 @@ void	ft_px(int *arr1, int *arr2, size_t *size_a1, size_t *size_a2)
 	*size_a2 -= 1;
 }
 
-void	ft_rx(int *arr, size_t *size)
+void	ft_rx(int *arr, size_t size)
 {
 	int		tmp;
 	size_t	i;
 
-	if (*size < 2)
+	if (size < 2)
 		return ;
 	tmp = arr[0];
 	i = 0;
-	while (i < *size - 1)
+	while (i < size - 1)
 	{
 		arr[i] = arr[i + 1];
 		i++;
@@ -63,14 +63,14 @@ void	ft_rx(int *arr, size_t *size)
 	arr[i] = tmp;
 }
 
-void	ft_rrx(int *arr, size_t *size)
+void	ft_rrx(int *arr, size_t size)
 {
 	int		tmp;
 	size_t	i;
 
-	if (*size < 2)
+	if (size < 2)
 		return ;
-	i = *size - 1;
+	i = size - 1;
 	tmp = arr[i];
 	while (i > 0)
 	{
