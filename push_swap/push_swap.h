@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checker.h                                          :+:      :+:    :+:   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdosch <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 12:55:37 by gdosch            #+#    #+#             */
-/*   Updated: 2024/12/05 12:55:38 by gdosch           ###   ########.fr       */
+/*   Created: 2024/12/12 11:14:28 by gdosch            #+#    #+#             */
+/*   Updated: 2024/12/12 11:14:30 by gdosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CHECKER_H
-# define CHECKER_H
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 
 # include <limits.h>
 # include <stdlib.h>
@@ -33,3 +33,4 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*get_next_line(int fd);
 
 #endif
+

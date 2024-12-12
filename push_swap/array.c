@@ -20,7 +20,7 @@ void	ft_cleanup(int **arr, char msg)
 	if (msg == 'e')
 	{
 		ft_printf("Error\n");
-		status = 1;
+		status = -1;
 	}
 	if (msg == 'o')
 		ft_printf("OK\n");
@@ -67,7 +67,7 @@ static int	ft_atoi_ps(const char *nptr, int **stack)
 
 void	ft_fill_arr(int argc, char **argv, int **stack)
 {
-	char	**split_res;
+	char	**split_ret;
 	size_t	i;
 	size_t	j;
 	size_t	k;
@@ -76,19 +76,19 @@ void	ft_fill_arr(int argc, char **argv, int **stack)
 	j = 0;
 	while (i < (size_t)(argc - 1))
 	{
-		split_res = ft_split(argv[i + 1], ' ');
-		if (!split_res)
+		split_ret = ft_split(argv[i + 1], ' ');
+		if (!split_ret)
 			ft_cleanup(stack, 'e');
 		k = 0;
-		while (split_res[k])
+		while (split_ret[k])
 		{
-			stack[0][i + j] = ft_atoi_ps(split_res[k], stack);
-			free(split_res[k]);
+			stack[0][i + j] = ft_atoi_ps(split_ret[k], stack);
+			free(split_ret[k]);
 			k++;
-			if (split_res[k])
+			if (split_ret[k])
 				j++;
 		}
-		free(split_res);
+		free(split_ret);
 		i++;
 	}
 }
