@@ -26,12 +26,12 @@ void	ft_cleanup(int **arr, char msg)
 		ft_printf("OK\n");
 	if (msg == 'k')
 		ft_printf("KO\n");
-	if (arr[0])
+	if (arr && arr[0])
 	{
 		free(arr[0]);
 		arr[0] = 0;
 	}
-	if (arr[1])
+	if (arr && arr[1])
 	{
 		free(arr[1]);
 		arr[1] = 0;

@@ -16,9 +16,11 @@
 # include <limits.h>
 # include <stdlib.h>
 
-void	ft_fill_arr(int argc, char **argv, int **stack);
-void	ft_exec_ops(int **stack, size_t *size);
 void	ft_cleanup(int **arr, char msg);
+void	ft_fill_arr(int argc, char **argv, int **stack);
+int		*ft_simplify_arr(int *stack, size_t size);
+void	ft_sort_few(int **stack, size_t size);
+void	ft_radix_sort(int **stack, size_t *size);
 
 void	ft_sx(int *arr, size_t size);
 void	ft_px(int *arr1, int *arr2, size_t *size_a1, size_t *size_a2);
@@ -27,10 +29,8 @@ void	ft_rrx(int *arr, size_t size);
 
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_isdigit(int c);
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 int		ft_printf(const char *format, ...);
 char	**ft_split(char const *s, char c);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	*get_next_line(int fd);
 
 #endif
-
