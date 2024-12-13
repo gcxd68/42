@@ -90,6 +90,6 @@ int	main(int argc, char *argv[])
 	ft_check_arr(stack, size);
 	stack[0] = ft_simplify_arr(stack[0], size[0]);
 	ft_sort_few(stack, size[0]);
-	ft_radix_sort(stack, size);
+	ft_radix_sort(stack, size, size[0]);
 	return (0);
 }

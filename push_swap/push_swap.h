@@ -20,12 +20,12 @@ void	ft_cleanup(int **arr, char msg);
 void	ft_fill_arr(int argc, char **argv, int **stack);
 int		*ft_simplify_arr(int *stack, size_t size);
 void	ft_sort_few(int **stack, size_t size);
-void	ft_radix_sort(int **stack, size_t *size);
+void	ft_radix_sort(int **stack, size_t *size, size_t max_size);
 
-void	ft_sx(int *arr, size_t size);
-void	ft_px(int *arr1, int *arr2, size_t *size_a1, size_t *size_a2);
-void	ft_rx(int *arr, size_t size);
-void	ft_rrx(int *arr, size_t size);
+void	ft_sx(int *arr, size_t size, char stack, int msg);
+void	ft_px(int **arr, size_t *size, char stack, int msg);
+void	ft_rx(int *arr, size_t size, char stack, int msg);
+void	ft_rrx(int *arr, size_t size, char stack, int msg);
 
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_isdigit(int c);

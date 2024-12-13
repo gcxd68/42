@@ -89,15 +89,13 @@ void	ft_sort_few(int **stack, size_t size)
 		ft_cleanup(stack, 'n');
 }
 
-void	ft_radix_sort(int **stack, size_t *size)
+void	ft_radix_sort(int **stack, size_t *size, size_t max_size)
 {
 	size_t	max_bits;
-	size_t	max_size;
 	size_t	i;
 	size_t	j;
 
 	max_bits = 0;
-	max_size = size[0];
 	while (((max_size - 1) >> max_bits) != 0)
 		max_bits++;
 	i = 0;
@@ -107,22 +105,13 @@ void	ft_radix_sort(int **stack, size_t *size)
 		while (j < max_size)
 		{
 			if (((stack[0][0] >> i) & 1) == 1)
-			{
-				ft_rx(stack[0], size[0]);
-				ft_printf("ra\n");
-			}
+				ft_rx(stack[0], size[0], 'a', 1);
 			else
-			{
-				ft_px(stack[1], stack[0], &size[1], &size[0]);
-				ft_printf("pb\n");
-			}
+				ft_px(stack, size, 'b', 1);
 			j++;
 		}
 		while (size[1] > 0)
-		{
-			ft_px(stack[0], stack[1], &size[0], &size[1]);
-			ft_printf("pa\n");
-		}
+			ft_px(stack, size, 'a', 1);
 		i++;
 	}
 	ft_cleanup(stack, 'n');
