@@ -57,7 +57,7 @@ static void	ft_dupcheck(int **stack, size_t size_a)
 	}
 }
 
-static void	ft_check_arr(int **stack, size_t *size)
+void	ft_check_arr(int **stack, size_t *size)
 {
 	size_t	i;
 
@@ -81,15 +81,14 @@ int	main(int argc, char *argv[])
 	stack[0] = ft_calloc(size[0], sizeof(int));
 	if (!stack[0])
 		ft_cleanup(NULL, 'e');
-	ft_fill_arr(argc, argv, stack);
-	ft_dupcheck(stack, size[0]);
 	stack[1] = ft_calloc(size[0], sizeof(int));
 	if (!stack[1])
 		ft_cleanup(stack, 'e');
 	size[1] = 0;
+	ft_fill_arr(argc, argv, stack);
+	ft_dupcheck(stack, size[0]);
 	ft_check_arr(stack, size);
 	stack[0] = ft_simplify_arr(stack[0], size[0]);
-	ft_sort_few(stack, size[0]);
-	ft_radix_sort(stack, size, size[0]);
+	ft_sort_array(stack, size);
 	return (0);
 }
