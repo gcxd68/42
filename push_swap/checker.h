@@ -16,9 +16,9 @@
 # include <limits.h>
 # include <stdlib.h>
 
-void	ft_fill_arr(int argc, char **argv, int **stack);
-void	ft_exec_ops(int **stack, size_t *size);
 void	ft_cleanup(int **arr, char msg);
+void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size);
+size_t	ft_find_size(int argc, char **argv);
 
 void	ft_sx(int *arr, size_t size, char stack, int msg);
 void	ft_px(int **arr, size_t *size, char stack, int msg);

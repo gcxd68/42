@@ -18,8 +18,8 @@
 
 void	ft_cleanup(int **arr, char msg);
 void	ft_check_arr(int **stack, size_t *size);
-void	ft_fill_arr(int argc, char **argv, int **stack);
-int		*ft_simplify_arr(int *stack, size_t size);
+void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size);
+size_t	ft_find_size(int argc, char **argv);
 void	ft_sort_array(int **stack, size_t *size);
 
 void	ft_sx(int *arr, size_t size, char stack, int msg);

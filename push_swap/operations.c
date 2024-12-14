@@ -27,55 +27,43 @@ void	ft_sx(int *arr, size_t size, char stack, int msg)
 	arr[1] = tmp;
 }
 
-static void	ft_px_core(int *d_arr, int *s_arr, size_t *d_size, size_t *s_size)
+static void	ft_px_core(int *dst, int *src, size_t *dst_size, size_t *src_size)
 {
 	size_t	i;
 
-	if (*s_size < 1)
+	if (*src_size < 1)
 		return ;
-	i = *d_size;
+	i = *dst_size;
 	while (i > 0)
 	{
-		d_arr[i] = d_arr[i - 1];
+		dst[i] = dst[i - 1];
 		i--;
 	}
-	d_arr[0] = s_arr[0];
+	dst[0] = src[0];
 	i = 0;
-	while (i < *s_size - 1)
+	while (i < *src_size - 1)
 	{
-		s_arr[i] = s_arr[i + 1];
+		src[i] = src[i + 1];
 		i++;
 	}
-	*d_size += 1;
-	*s_size -= 1;
+	*dst_size += 1;
+	*src_size -= 1;
 }
 
 void	ft_px(int **arr, size_t *size, char stack, int msg)
 {
-	int		*src_arr;
-	int		*dest_arr;
-	size_t	*src_size;
-	size_t	*dest_size;
-
 	if (stack == 'a')
 	{
 		if (msg == 1)
 			ft_printf("pa\n");
-		dest_arr = arr[0];
-		src_arr = arr[1];
-		dest_size = &size[0];
-		src_size = &size[1];
+		ft_px_core(arr[0], arr[1], &size[0], &size[1]);
 	}
 	else
 	{
 		if (msg == 1)
 			ft_printf("pb\n");
-		dest_arr = arr[1];
-		src_arr = arr[0];
-		dest_size = &size[1];
-		src_size = &size[0];
+		ft_px_core(arr[1], arr[0], &size[1], &size[0]);
 	}
-	ft_px_core(dest_arr, src_arr, dest_size, src_size);
 }
 
 void	ft_rx(int *arr, size_t size, char stack, int msg)

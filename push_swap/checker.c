@@ -12,48 +12,68 @@
 
 #include "checker.h"
 
-static size_t	ft_find_size(int argc, char **argv)
+static void	ft_exec_x_op(char *line, int **stack, size_t *size)
 {
-	char	*str;
-	size_t	i;
-	size_t	size;
-
-	i = 0;
-	size = 0;
-	while (i < (size_t)(argc - 1))
-	{
-		str = argv[i + 1];
-		while (*str)
-		{
-			while (*str == ' ')
-				str++;
-			if (*str)
-				size++;
-			while (*str && *str != ' ')
-				str++;
-		}
-		i++;
-	}
-	return (size);
+	if (ft_strncmp(line, "sa\n", 3) == 0)
+		ft_sx(stack[0], size[0], 'a', 0);
+	else if (ft_strncmp(line, "sb\n", 3) == 0)
+		ft_sx(stack[1], size[1], 'b', 0);
+	else if (ft_strncmp(line, "pa\n", 3) == 0)
+		ft_px(stack, size, 'a', 0);
+	else if (ft_strncmp(line, "pb\n", 3) == 0)
+		ft_px(stack, size, 'b', 0);
+	else if (ft_strncmp(line, "ra\n", 3) == 0)
+		ft_rx(stack[0], size[0], 'a', 0);
+	else if (ft_strncmp(line, "rb\n", 3) == 0)
+		ft_rx(stack[1], size[1], 'b', 0);
+	else if (ft_strncmp(line, "rra\n", 4) == 0)
+		ft_rrx(stack[0], size[0], 'a', 0);
+	else if (ft_strncmp(line, "rrb\n", 4) == 0)
+		ft_rrx(stack[1], size[1], 'b', 0);
 }
 
-static void	ft_dupcheck(int **stack, size_t size_a)
+static void	ft_exec_ab_op(char *line, int **stack, size_t *size)
 {
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	while (i < size_a - 1)
+	if (ft_strncmp(line, "ss\n", 3) == 0)
 	{
-		j = i + 1;
-		while (j < size_a)
-		{
-			if (stack[0][i] == stack[0][j])
-				ft_cleanup(stack, 'e');
-			j++;
-		}
-		i++;
+		ft_sx(stack[0], size[0], 'a', 0);
+		ft_sx(stack[1], size[1], 'b', 0);
+	}
+	else if (ft_strncmp(line, "rr\n", 3) == 0)
+	{
+		ft_rx(stack[0], size[0], 'a', 0);
+		ft_rx(stack[1], size[1], 'b', 0);
+	}
+	else if (ft_strncmp(line, "rrr\n", 4) == 0)
+	{
+		ft_rrx(stack[0], size[0], 'a', 0);
+		ft_rrx(stack[1], size[1], 'b', 0);
+	}
+}
+
+static void	ft_exec_ops(int **stack, size_t *size)
+{
+	char	*line;
+
+	line = get_next_line(0);
+	while (line)
+	{
+		if (ft_strncmp(line, "sa\n", 3) == 0 || ft_strncmp(line, "ra\n", 3) == 0
+			|| ft_strncmp(line, "rra\n", 4) == 0
+			|| ft_strncmp(line, "sb\n", 3) == 0
+			|| ft_strncmp(line, "rb\n", 3) == 0
+			|| ft_strncmp(line, "rrb\n", 4) == 0
+			|| ft_strncmp(line, "pa\n", 3) == 0
+			|| ft_strncmp(line, "pb\n", 3) == 0)
+			ft_exec_x_op(line, stack, size);
+		else if (ft_strncmp(line, "ss\n", 3) == 0
+			|| ft_strncmp(line, "rr\n", 3) == 0
+			|| ft_strncmp(line, "rrr\n", 4) == 0)
+			ft_exec_ab_op(line, stack, size);
+		else
+			ft_cleanup(stack, 'e');
+		free(line);
+		line = get_next_line(0);
 	}
 }
 
@@ -82,12 +102,11 @@ int	main(int argc, char *argv[])
 	stack[0] = ft_calloc(size[0], sizeof(int));
 	if (!stack[0])
 		ft_cleanup(NULL, 'e');
-	ft_fill_arr(argc, argv, stack);
-	ft_dupcheck(stack, size[0]);
 	stack[1] = ft_calloc(size[0], sizeof(int));
 	if (!stack[1])
 		ft_cleanup(stack, 'e');
 	size[1] = 0;
+	ft_fill_arr(argc, argv, stack, size);
 	ft_exec_ops(stack, size);
 	ft_check_arr(stack, size);
 	return (0);

@@ -65,7 +65,27 @@ static int	ft_atoi_ps(const char *nptr, int **stack)
 	return ((int)res * sign);
 }
 
-void	ft_fill_arr(int argc, char **argv, int **stack)
+static void	ft_dupcheck(int **stack, size_t size_a)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while (i < size_a - 1)
+	{
+		j = i + 1;
+		while (j < size_a)
+		{
+			if (stack[0][i] == stack[0][j])
+				ft_cleanup(stack, 'e');
+			j++;
+		}
+		i++;
+	}
+}
+
+void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size)
 {
 	char	**split_ret;
 	size_t	i;
@@ -91,4 +111,30 @@ void	ft_fill_arr(int argc, char **argv, int **stack)
 		free(split_ret);
 		i++;
 	}
+	ft_dupcheck(stack, size[0]);
+}
+
+size_t	ft_find_size(int argc, char **argv)
+{
+	char	*str;
+	size_t	i;
+	size_t	size;
+
+	i = 0;
+	size = 0;
+	while (i < (size_t)(argc - 1))
+	{
+		str = argv[i + 1];
+		while (*str)
+		{
+			while (*str == ' ')
+				str++;
+			if (*str)
+				size++;
+			while (*str && *str != ' ')
+				str++;
+		}
+		i++;
+	}
+	return (size);
 }

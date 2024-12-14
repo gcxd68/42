@@ -12,49 +12,63 @@
 
 #include "push_swap.h"
 
-static size_t	ft_find_size(int argc, char **argv)
+static void	ft_bubble_sort(int *arr, size_t size)
 {
-	char	*str;
 	size_t	i;
-	size_t	size;
+	size_t	j;
+	int		temp;
 
 	i = 0;
-	size = 0;
-	while (i < (size_t)(argc - 1))
+	while (i < size - 1)
 	{
-		str = argv[i + 1];
-		while (*str)
+		j = 0;
+		while (j < size - i - 1)
 		{
-			while (*str == ' ')
-				str++;
-			if (*str)
-				size++;
-			while (*str && *str != ' ')
-				str++;
+			if (arr[j] > arr[j + 1])
+			{
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+			j++;
 		}
 		i++;
 	}
-	return (size);
 }
 
-static void	ft_dupcheck(int **stack, size_t size_a)
+static void	ft_map_values(int *stack, int *copy, size_t size)
 {
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	j = 0;
-	while (i < size_a - 1)
+	while (i < size)
 	{
-		j = i + 1;
-		while (j < size_a)
+		j = 0;
+		while (j < size)
 		{
-			if (stack[0][i] == stack[0][j])
-				ft_cleanup(stack, 'e');
+			if (stack[i] == copy[j])
+			{
+				stack[i] = j;
+				j = size;
+			}
 			j++;
 		}
 		i++;
 	}
+}
+
+static int	*ft_simplify_arr(int *stack, size_t size)
+{
+	int		*copy;
+
+	copy = ft_calloc(size, sizeof(int));
+	if (!copy)
+		ft_cleanup(NULL, 'e');
+	ft_memcpy(copy, stack, size * sizeof(int));
+	ft_bubble_sort(copy, size);
+	ft_map_values(stack, copy, size);
+	return (free(copy), copy = 0, stack);
 }
 
 void	ft_check_arr(int **stack, size_t *size)
@@ -85,8 +99,7 @@ int	main(int argc, char *argv[])
 	if (!stack[1])
 		ft_cleanup(stack, 'e');
 	size[1] = 0;
-	ft_fill_arr(argc, argv, stack);
-	ft_dupcheck(stack, size[0]);
+	ft_fill_arr(argc, argv, stack, size);
 	ft_check_arr(stack, size);
 	stack[0] = ft_simplify_arr(stack[0], size[0]);
 	ft_sort_array(stack, size);
