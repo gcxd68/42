@@ -12,11 +12,11 @@
 
 #include "checker.h"
 
-void	ft_sx(int *arr, size_t size, char stack, int msg)
+void	ft_sx(int *arr, size_t size, int stack, int msg)
 {
 	int	tmp;
 
-	if (msg == 1 && stack == 'a')
+	if (msg == 1 && stack == 0)
 		ft_printf("sa\n");
 	else if (msg == 1)
 		ft_printf("sb\n");
@@ -50,9 +50,9 @@ static void	ft_px_core(int *dst, int *src, size_t *dst_size, size_t *src_size)
 	*src_size -= 1;
 }
 
-void	ft_px(int **arr, size_t *size, char stack, int msg)
+void	ft_px(int **arr, size_t *size, int stack, int msg)
 {
-	if (stack == 'a')
+	if (stack == 0)
 	{
 		if (msg == 1)
 			ft_printf("pa\n");
@@ -66,12 +66,12 @@ void	ft_px(int **arr, size_t *size, char stack, int msg)
 	}
 }
 
-void	ft_rx(int *arr, size_t size, char stack, int msg)
+void	ft_rx(int *arr, size_t size, int stack, int msg)
 {
 	int		tmp;
 	size_t	i;
 
-	if (msg == 1 && stack == 'a')
+	if (msg == 1 && stack == 0)
 		ft_printf("ra\n");
 	else if (msg == 1)
 		ft_printf("rb\n");
@@ -87,12 +87,12 @@ void	ft_rx(int *arr, size_t size, char stack, int msg)
 	arr[i] = tmp;
 }
 
-void	ft_rrx(int *arr, size_t size, char stack, int msg)
+void	ft_rrx(int *arr, size_t size, int stack, int msg)
 {
 	int		tmp;
 	size_t	i;
 
-	if (msg == 1 && stack == 'a')
+	if (msg == 1 && stack == 0)
 		ft_printf("rra\n");
 	else if (msg == 1)
 		ft_printf("rrb\n");

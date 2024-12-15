@@ -65,84 +65,37 @@ static void	ft_sort_five(int **stack, size_t *size)
 	ft_px(stack, size, 0, 1);
 }
 
-static void	ft_sort_many(int **stack, size_t *size)
+static void	ft_sort_many(int **stack, size_t *size, size_t max_bits)
 {
-	
-//	t_cost	best_cost;
-	t_cost	cost;
-	int		prev_a;
-	int		curr_a;
-	int		top_b;
 	size_t	i;
 	size_t	j;
+	int		use_stack_a;
 
-	while (size[0] > 5)
-        ft_px(stack, size, 1, 1);
-	ft_sort_five(stack, size);
-	j = 0;
-	while (j < size[1])
+	i = 0;
+	while (i < max_bits)
 	{
-		top_b = stack[1][j];
-		i = 0;
-		curr_a = stack[0][i];
-		prev_a = stack[0][size[0] - 1];
-		while (i < size[0])
+		use_stack_a = size[0];
+		j = 0;
+		while (j < size[0] + size[1])
 		{
-			if ((top_b > prev_a && top_b < curr_a) ||
-				(i == 0 && top_b < curr_a) ||
-				(i == 0 && top_b > prev_a))
-				break;
-			i++;
-			if (i < size[0])
-			{
-				prev_a = stack[0][i - 1];
-				curr_a = stack[0][i];
-			}
-        }
-        cost.ra = i;
-        cost.rra = size[0] - i;
-        cost.rb = j;
-        cost.rrb = size[1] - j;
-        
-		cost.total = 0;
-		int combined_rr = cost.ra;
-		if (cost.rb > combined_rr)
-		    combined_rr = cost.rb;
-		int combined_rrr = cost.rra;
-		if (cost.rrb > combined_rrr)
-		    combined_rrr = cost.rrb;
-		int separate_ra_rrb = cost.ra + cost.rrb;
-		int separate_rra_rb = cost.rra + cost.rb;
-		cost.total = combined_rr;
-		if (combined_rrr < cost.total)
-		    cost.total = combined_rrr;
-		if (separate_ra_rrb < cost.total)
-		    cost.total = separate_ra_rrb;
-		if (separate_rra_rb < cost.total)
-		    cost.total = separate_rra_rb;
-		ft_printf("Cout de transfert de stack[1][%u] = %i avant stack[0][%u] = %i : RA = %i, RRA = %i, RB = %i, RRB = %i, TOTAL = %i\n",
-			j, top_b, i, curr_a, cost.ra, cost.rra, cost.rb, cost.rrb, cost.total);
-		j++;
+			if (use_stack_a > 0 && ((stack[0][0] >> i) & 1) == 1)
+				ft_rx(stack[0], size[0], 0, 1);
+			else if (use_stack_a == 0 && ((stack[1][0] >> i) & 1) == 0)
+				ft_rx(stack[1], size[1], 1, 1);
+			else
+				ft_px(stack, size, (use_stack_a > 0), 1);
+			j++;
+		}
+		while (size[(size[0] >= size[1] || i == max_bits - 1)] > 0)
+			ft_px(stack, size, (size[0] < size[1] && i != max_bits - 1), 1);
+		i++;
 	}
-
-	size_t	idx;
-	ft_printf("\n");
-	ft_printf("Contenu de la pile A :\n");
-	for (idx = 0; idx < size[0]; idx++)
-	{
-		ft_printf("%d ", stack[0][idx]);
-	}
-	ft_printf("\n\n");
-	ft_printf("Contenu de la pile B :\n");
-	for (idx = 0; idx < size[1]; idx++)
-	{
-		ft_printf("%d ", stack[1][idx]);
-	}
-	ft_printf("\n\n");
 }
 
 void	ft_sort_array(int **stack, size_t *size)
 {
+	size_t	max_bits;
+
 	if (size[0] < 4)
 		ft_sort_few(stack[0], size[0]);
 	else if (size[0] == 4)
@@ -150,6 +103,11 @@ void	ft_sort_array(int **stack, size_t *size)
 	else if (size[0] == 5)
 		ft_sort_five(stack, size);
 	else
-		ft_sort_many(stack, size);
+	{
+		max_bits = 0;
+		while (((size[0] + size[1] - 1) >> max_bits) != 0)
+			max_bits++;
+		ft_sort_many(stack, size, max_bits);
+	}
 	ft_cleanup(stack, 'n');
 }

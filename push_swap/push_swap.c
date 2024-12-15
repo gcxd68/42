@@ -36,11 +36,17 @@ static void	ft_bubble_sort(int *arr, size_t size)
 	}
 }
 
-static void	ft_map_values(int *stack, int *copy, size_t size)
+static int	*ft_simplify_arr(int *stack, size_t size)
 {
+	int		*copy;
 	size_t	i;
 	size_t	j;
 
+	copy = ft_calloc(size, sizeof(int));
+	if (!copy)
+		ft_cleanup(NULL, 'e');
+	ft_memcpy(copy, stack, size * sizeof(int));
+	ft_bubble_sort(copy, size);
 	i = 0;
 	while (i < size)
 	{
@@ -56,32 +62,37 @@ static void	ft_map_values(int *stack, int *copy, size_t size)
 		}
 		i++;
 	}
-}
-
-static int	*ft_simplify_arr(int *stack, size_t size)
-{
-	int		*copy;
-
-	copy = ft_calloc(size, sizeof(int));
-	if (!copy)
-		ft_cleanup(NULL, 'e');
-	ft_memcpy(copy, stack, size * sizeof(int));
-	ft_bubble_sort(copy, size);
-	ft_map_values(stack, copy, size);
 	return (free(copy), copy = 0, stack);
 }
 
-void	ft_check_arr(int **stack, size_t *size)
+int	ft_check_sort(int **stack, size_t *size)
 {
 	size_t	i;
 
-	if (!stack || !stack[0])
-		ft_cleanup(stack, 'e');
 	i = 0;
-	while (i < size[0] - 1 && stack[0][i] < stack[0][i + 1])
+	while (i < size[0] - 1)
+	{
+		if (stack[0][i] > stack[0][i + 1])
+			return (0);
 		i++;
-	if (i == size[0] - 1 && size[1] == 0)
-		ft_cleanup(stack, 'n');
+	}
+	return (1);
+}
+
+int	ft_find_min(int *stack, size_t *size)
+{
+	int		min;
+	size_t	i;
+
+	min = size[0] + size[1];
+	i = 0;
+	while (i < size[0] && min > 0)
+	{
+		if (stack[i] < min)
+			min = stack[i];
+		i++;
+	}
+	return (min);
 }
 
 int	main(int argc, char *argv[])
@@ -100,7 +111,8 @@ int	main(int argc, char *argv[])
 		ft_cleanup(stack, 'e');
 	size[1] = 0;
 	ft_fill_arr(argc, argv, stack, size);
-	ft_check_arr(stack, size);
+	if (ft_check_sort(stack, size) == 1)
+		ft_cleanup(stack, 'n');
 	stack[0] = ft_simplify_arr(stack[0], size[0]);
 	ft_sort_array(stack, size);
 	return (0);

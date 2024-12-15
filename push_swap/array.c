@@ -60,7 +60,7 @@ static int	ft_atoi_ps(const char *nptr, int **stack)
 			ft_cleanup(stack, 'e');
 		nptr++;
 	}
-	if (ft_isdigit(*nptr) == 0 && *nptr != '\0')
+	if ((*nptr < '0' || *nptr > '9') && *nptr != '\0')
 		ft_cleanup(stack, 'e');
 	return ((int)res * sign);
 }
