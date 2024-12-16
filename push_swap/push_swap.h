@@ -17,11 +17,12 @@
 # include <stdlib.h>
 
 typedef struct s_cost {
-    int total;
-    int ra;
-    int rra;
-    int rb;
-    int rrb;
+    size_t total;
+    size_t ra;
+    size_t rra;
+    size_t rb;
+    size_t rrb;
+    char rot;
 } t_cost;
 
 void	ft_cleanup(int **arr, char msg);
