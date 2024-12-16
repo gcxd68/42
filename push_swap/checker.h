@@ -20,10 +20,10 @@ void	ft_cleanup(int **arr, char msg);
 void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size);
 size_t	ft_find_size(int argc, char **argv);
 
-void	ft_sx(int *arr, size_t size, int stack, int msg);
-void	ft_px(int **arr, size_t *size, int stack, int msg);
-void	ft_rx(int *arr, size_t size, int stack, int msg);
-void	ft_rrx(int *arr, size_t size, int stack, int msg);
+void	ft_sx(int **stack, size_t *size, int num, int msg);
+void	ft_px(int **stack, size_t *size, int num, int msg);
+void	ft_rx(int **stack, size_t *size, int num, int msg);
+void	ft_rrx(int **stack, size_t *size, int num, int msg);
 
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_printf(const char *format, ...);

@@ -16,26 +16,28 @@
 # include <limits.h>
 # include <stdlib.h>
 
-typedef struct s_cost {
-    size_t total;
-    size_t ra;
-    size_t rra;
-    size_t rb;
-    size_t rrb;
-    char rot;
-} t_cost;
+typedef struct s_cost
+{
+	size_t	total;
+	size_t	ra;
+	size_t	rra;
+	size_t	rb;
+	size_t	rrb;
+	char	rot;
+}	t_cost;
 
 void	ft_cleanup(int **arr, char msg);
 int		ft_check_sort(int **stack, size_t *size);
 void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size);
 int		ft_find_min(int *stack, size_t *size);
+void	ft_find_min_max(int *stack, size_t size, int *min, int *max);
 size_t	ft_find_size(int argc, char **argv);
 void	ft_sort_array(int **stack, size_t *size);
 
-void	ft_sx(int *arr, size_t size, int stack, int msg);
-void	ft_px(int **arr, size_t *size, int stack, int msg);
-void	ft_rx(int *arr, size_t size, int stack, int msg);
-void	ft_rrx(int *arr, size_t size, int stack, int msg);
+void	ft_sx(int **stack, size_t *size, int num, int msg);
+void	ft_px(int **stack, size_t *size, int num, int msg);
+void	ft_rx(int **stack, size_t *size, int num, int msg);
+void	ft_rrx(int **stack, size_t *size, int num, int msg);
 
 void	*ft_calloc(size_t nmemb, size_t size);
 void	*ft_memcpy(void *dest, const void *src, size_t n);

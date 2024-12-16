@@ -15,40 +15,31 @@
 static void	ft_exec_x_op(char *line, int **stack, size_t *size)
 {
 	if (ft_strncmp(line, "sa\n", 3) == 0)
-		ft_sx(stack[0], size[0], 0, 0);
+		ft_sx(stack, size, 0, 0);
 	else if (ft_strncmp(line, "sb\n", 3) == 0)
-		ft_sx(stack[1], size[1], 1, 0);
+		ft_sx(stack, size, 1, 0);
 	else if (ft_strncmp(line, "pa\n", 3) == 0)
 		ft_px(stack, size, 0, 0);
 	else if (ft_strncmp(line, "pb\n", 3) == 0)
 		ft_px(stack, size, 1, 0);
 	else if (ft_strncmp(line, "ra\n", 3) == 0)
-		ft_rx(stack[0], size[0], 0, 0);
+		ft_rx(stack, size, 0, 0);
 	else if (ft_strncmp(line, "rb\n", 3) == 0)
-		ft_rx(stack[1], size[1], 1, 0);
+		ft_rx(stack, size, 1, 0);
 	else if (ft_strncmp(line, "rra\n", 4) == 0)
-		ft_rrx(stack[0], size[0], 0, 0);
+		ft_rrx(stack, size, 0, 0);
 	else if (ft_strncmp(line, "rrb\n", 4) == 0)
-		ft_rrx(stack[1], size[1], 1, 0);
+		ft_rrx(stack, size, 1, 0);
 }
 
 static void	ft_exec_ab_op(char *line, int **stack, size_t *size)
 {
 	if (ft_strncmp(line, "ss\n", 3) == 0)
-	{
-		ft_sx(stack[0], size[0], 0, 0);
-		ft_sx(stack[1], size[1], 1, 0);
-	}
+		ft_sx(stack, size, 2, 0);
 	else if (ft_strncmp(line, "rr\n", 3) == 0)
-	{
-		ft_rx(stack[0], size[0], 0, 0);
-		ft_rx(stack[1], size[1], 1, 0);
-	}
+		ft_rx(stack, size, 2, 0);
 	else if (ft_strncmp(line, "rrr\n", 4) == 0)
-	{
-		ft_rrx(stack[0], size[0], 0, 0);
-		ft_rrx(stack[1], size[1], 1, 0);
-	}
+		ft_rrx(stack, size, 2, 0);
 }
 
 static void	ft_exec_ops(int **stack, size_t *size)
