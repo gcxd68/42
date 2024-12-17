@@ -29,10 +29,11 @@ typedef struct s_cost
 void	ft_cleanup(int **arr, char msg);
 int		ft_check_sort(int **stack, size_t *size);
 void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size);
-int		ft_find_min(int *stack, size_t *size);
 void	ft_find_min_max(int *stack, size_t size, int *min, int *max);
 size_t	ft_find_size(int argc, char **argv);
 void	ft_sort_array(int **stack, size_t *size);
+void	ft_sort_five(int **stack, size_t *size);
+void	ft_sort_many(int **stack, size_t *size);
 
 void	ft_sx(int **stack, size_t *size, int num, int msg);
 void	ft_px(int **stack, size_t *size, int num, int msg);
