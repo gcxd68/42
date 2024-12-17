@@ -25,16 +25,28 @@ void	ft_sort_many(int **stack, size_t *size)
 	size_t	i;
 	size_t	j;
 
-	while (size[0] > 5)
+	while (size[0] > ((size[0] + size[1]) / 2))
 	{
-		if (stack[0][0] < 5)
-			ft_rx(stack, size, 0, 1);
-		ft_px(stack, size, 1, 1);
-		if (stack[0][0] >= (int)((size[0] + size[1]) / 2))
+		if (stack[0][0] < (int)((size[0] + size[1]) / 4))
+		{
+			ft_px(stack, size, 1, 1);
 			ft_rx(stack, size, 1, 1);
+		}
+		else if (stack[0][0] >= (int)((size[0] + size[1]) * 3 / 4))
+			ft_px(stack, size, 1, 1);
+		else
+			ft_rx(stack, size, 0, 1);
 	}
 	while (size[0] > 5)
-		ft_px(stack, size, 1, 1);
+	{
+		if (stack[0][0] < (int)((size[0] + size[1]) / 2))
+		{
+			ft_px(stack, size, 1, 1);
+			ft_rx(stack, size, 1, 1);
+		}
+		else if (stack[0][0] >= (int)((size[0] + size[1]) / 2))
+			ft_px(stack, size, 1, 1);
+	}
 	ft_sort_five(stack, size);
 	while (size[1] > 0)
 	{
