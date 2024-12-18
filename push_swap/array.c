@@ -10,7 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+# include <limits.h>
+# include <stdlib.h>
+
+int		ft_printf(const char *format, ...);
+char	**ft_split(char const *s, char c);
 
 void	ft_cleanup(int **arr, char msg)
 {

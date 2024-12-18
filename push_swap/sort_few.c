@@ -29,12 +29,12 @@ static void	ft_sort_few(int **stack, size_t *size)
 
 static void	ft_sort_four(int **stack, size_t *size)
 {
-	int	min;
+	int	bound[2];
 
-	ft_find_min_max(stack[0], size[0], &min, NULL);
-	while (stack[0][0] != min && stack[0][size[0] - 1] != min)
+	ft_find_bounds(stack[0], size[0], bound);
+	while (stack[0][0] != bound[0] && stack[0][size[0] - 1] != bound[0])
 		ft_rx(stack, size, 0, 1);
-	if (stack[0][size[0] - 1] == min)
+	if (stack[0][size[0] - 1] == bound[0])
 		ft_rrx(stack, size, 0, 1);
 	if (ft_check_sort(stack, size) == 1)
 		return ;
@@ -45,15 +45,15 @@ static void	ft_sort_four(int **stack, size_t *size)
 
 void	ft_sort_five(int **stack, size_t *size)
 {
-	int	min;
+	int	bound[2];
 
-	ft_find_min_max(stack[0], size[0], &min, NULL);
-	while (stack[0][0] != min && stack[0][size[0] - 1] != min
-		&& stack[0][size[0] - 2] != min)
+	ft_find_bounds(stack[0], size[0], bound);
+	while (stack[0][0] != bound[0] && stack[0][size[0] - 1] != bound[0]
+		&& stack[0][size[0] - 2] != bound[0])
 		ft_rx(stack, size, 0, 1);
-	if (stack[0][size[0] - 1] == min)
+	if (stack[0][size[0] - 1] == bound[0])
 		ft_rrx(stack, size, 0, 1);
-	else if (stack[0][size[0] - 2] == min)
+	else if (stack[0][size[0] - 2] == bound[0])
 	{
 		ft_rrx(stack, size, 0, 1);
 		ft_rrx(stack, size, 0, 1);

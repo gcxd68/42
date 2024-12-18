@@ -13,7 +13,6 @@
 #ifndef CHECKER_H
 # define CHECKER_H
 
-# include <limits.h>
 # include <stdlib.h>
 
 void	ft_cleanup(int **arr, char msg);
@@ -26,8 +25,6 @@ void	ft_rx(int **stack, size_t *size, int num, int msg);
 void	ft_rrx(int **stack, size_t *size, int num, int msg);
 
 void	*ft_calloc(size_t nmemb, size_t size);
-int		ft_printf(const char *format, ...);
-char	**ft_split(char const *s, char c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*get_next_line(int fd);
 

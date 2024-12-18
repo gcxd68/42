@@ -27,10 +27,12 @@ typedef struct s_cost
 }	t_cost;
 
 void	ft_cleanup(int **arr, char msg);
+void	ft_apply_cost_plan(int **stack, size_t *size, t_cost best_cost);
 int		ft_check_sort(int **stack, size_t *size);
 void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size);
-void	ft_find_min_max(int *stack, size_t size, int *min, int *max);
+void	ft_find_bounds(int *stack, size_t size, int *bound);
 size_t	ft_find_size(int argc, char **argv);
+
 void	ft_sort_array(int **stack, size_t *size);
 void	ft_sort_five(int **stack, size_t *size);
 void	ft_sort_many(int **stack, size_t *size);
@@ -42,7 +44,5 @@ void	ft_rrx(int **stack, size_t *size, int num, int msg);
 
 void	*ft_calloc(size_t nmemb, size_t size);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
-int		ft_printf(const char *format, ...);
-char	**ft_split(char const *s, char c);
 
 #endif
