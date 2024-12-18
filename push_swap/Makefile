@@ -10,39 +10,50 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC =		push_swap.c \
-			array.c \
-			ops.c \
-			sort_few.c \
-			sort_many.c \
-			sort_utils.c
+SRC =			push_swap.c \
+				array.c \
+				ops.c \
+				sort_few.c \
+				sort_many.c \
+				sort_utils.c
 
-OBJ =		$(SRC:.c=.o)
+SRCB =			push_swap_bonus.c \
+				array_bonus.c \
+				ops_bonus.c
 
-SRCB =		checker.c \
-			array.c \
-			ops.c
+OBJ =			$(SRC:.c=.o)
+OBJB =			$(SRCB:.c=.o)
 
-OBJB =		$(SRCB:.c=.o)
+NAME =			push_swap
+BONUS_NAME =	checker
 
-NAME =		push_swap
-CC =		cc
-CFLAGS =	-Wall -Wextra -Werror
+CC =			cc
+CFLAGS =		-Wall -Wextra -Werror
 
-all:		$(NAME)
+LIBFT =			libft/libft.a
+LIBFT_DIR = 	libft
 
-$(NAME):	$(OBJ)
-			ar -rcs $(NAME) $(OBJ)
+all:			$(LIBFT) $(NAME)
 
-bonus:		$(OBJB)
-			ar -rcs $(NAME) $(OBJB)
+$(NAME):		$(OBJ)
+				$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT)
+
+bonus:			$(LIBFT) $(BONUS_NAME)
+
+$(BONUS_NAME):	$(OBJB)
+				$(CC) $(CFLAGS) -o $(BONUS_NAME) $(OBJB) $(LIBFT)
+
+$(LIBFT):
+				make -C $(LIBFT_DIR)
 
 clean:
-			rm -f $(OBJ) $(OBJB)
+				rm -f $(OBJ) $(OBJB)
+				make clean -C $(LIBFT_DIR)
 
-fclean:		clean
-			rm -f $(NAME)
+fclean:			clean
+				rm -f $(NAME) $(BONUS_NAME)
+				make fclean -C $(LIBFT_DIR)
 
-re:			fclean all
+re:				fclean all
 
-.PHONY:		bonus all clean fclean re
+.PHONY:			bonus all clean fclean re
