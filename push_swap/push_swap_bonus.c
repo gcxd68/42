@@ -12,7 +12,34 @@
 
 #include "push_swap_bonus.h"
 
-static void	ft_exec_x_op(char *line, int **stack, size_t *size)
+void	ft_cleanup(int **arr, char msg)
+{
+	int	status;
+
+	status = 0;
+	if (msg == 'e')
+	{
+		ft_printf("Error\n");
+		status = -1;
+	}
+	if (msg == 'o')
+		ft_printf("OK\n");
+	if (msg == 'k')
+		ft_printf("KO\n");
+	if (arr && arr[0])
+	{
+		free(arr[0]);
+		arr[0] = 0;
+	}
+	if (arr && arr[1])
+	{
+		free(arr[1]);
+		arr[1] = 0;
+	}
+	exit(status);
+}
+
+static void	ft_exec_op(char *line, int **stack, size_t *size)
 {
 	if (ft_strncmp(line, "sa\n", 3) == 0)
 		ft_sx(stack, size, 0, 0);
@@ -30,11 +57,7 @@ static void	ft_exec_x_op(char *line, int **stack, size_t *size)
 		ft_rrx(stack, size, 0, 0);
 	else if (ft_strncmp(line, "rrb\n", 4) == 0)
 		ft_rrx(stack, size, 1, 0);
-}
-
-static void	ft_exec_ab_op(char *line, int **stack, size_t *size)
-{
-	if (ft_strncmp(line, "ss\n", 3) == 0)
+	else if (ft_strncmp(line, "ss\n", 3) == 0)
 		ft_sx(stack, size, 2, 0);
 	else if (ft_strncmp(line, "rr\n", 3) == 0)
 		ft_rx(stack, size, 2, 0);
@@ -42,7 +65,7 @@ static void	ft_exec_ab_op(char *line, int **stack, size_t *size)
 		ft_rrx(stack, size, 2, 0);
 }
 
-static void	ft_exec_ops(int **stack, size_t *size)
+static void	ft_parse_ops(int **stack, size_t *size)
 {
 	char	*line;
 
@@ -55,12 +78,11 @@ static void	ft_exec_ops(int **stack, size_t *size)
 			|| ft_strncmp(line, "rb\n", 3) == 0
 			|| ft_strncmp(line, "rrb\n", 4) == 0
 			|| ft_strncmp(line, "pa\n", 3) == 0
-			|| ft_strncmp(line, "pb\n", 3) == 0)
-			ft_exec_x_op(line, stack, size);
-		else if (ft_strncmp(line, "ss\n", 3) == 0
+			|| ft_strncmp(line, "pb\n", 3) == 0
+			|| ft_strncmp(line, "ss\n", 3) == 0
 			|| ft_strncmp(line, "rr\n", 3) == 0
 			|| ft_strncmp(line, "rrr\n", 4) == 0)
-			ft_exec_ab_op(line, stack, size);
+			ft_exec_op(line, stack, size);
 		else
 			ft_cleanup(stack, 'e');
 		free(line);
@@ -98,7 +120,7 @@ int	main(int argc, char *argv[])
 		ft_cleanup(stack, 'e');
 	size[1] = 0;
 	ft_fill_arr(argc, argv, stack, size);
-	ft_exec_ops(stack, size);
+	ft_parse_ops(stack, size);
 	ft_check_arr(stack, size);
 	return (0);
 }

@@ -12,6 +12,33 @@
 
 #include "push_swap.h"
 
+void	ft_cleanup(int **arr, char msg)
+{
+	int	status;
+
+	status = 0;
+	if (msg == 'e')
+	{
+		ft_printf("Error\n");
+		status = -1;
+	}
+	if (msg == 'o')
+		ft_printf("OK\n");
+	if (msg == 'k')
+		ft_printf("KO\n");
+	if (arr && arr[0])
+	{
+		free(arr[0]);
+		arr[0] = 0;
+	}
+	if (arr && arr[1])
+	{
+		free(arr[1]);
+		arr[1] = 0;
+	}
+	exit(status);
+}
+
 static void	ft_r_is_cheaper(int **stack, size_t *size, t_cost best_cost)
 {
 	size_t	i;

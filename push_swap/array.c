@@ -12,31 +12,14 @@
 
 #include "push_swap.h"
 
-void	ft_cleanup(int **arr, char msg)
+static void	ft_free_split_ret(char **split_ret, size_t *k)
 {
-	int	status;
-
-	status = 0;
-	if (msg == 'e')
+	while (split_ret[*k])
 	{
-		ft_printf("Error\n");
-		status = -1;
+		free(split_ret[*k]);
+		(*k)++;
 	}
-	if (msg == 'o')
-		ft_printf("OK\n");
-	if (msg == 'k')
-		ft_printf("KO\n");
-	if (arr && arr[0])
-	{
-		free(arr[0]);
-		arr[0] = 0;
-	}
-	if (arr && arr[1])
-	{
-		free(arr[1]);
-		arr[1] = 0;
-	}
-	exit(status);
+	free(split_ret);
 }
 
 static int	ft_atoi_ps(char **split_ret, char *nptr, int **stack, size_t *k)
@@ -62,12 +45,7 @@ static int	ft_atoi_ps(char **split_ret, char *nptr, int **stack, size_t *k)
 	}
 	if ((*nptr < '0' || *nptr > '9') && *nptr != '\0')
 	{
-		while (split_ret[*k])
-		{
-			free(split_ret[*k]);
-			(*k)++;
-		}		
-		free(split_ret);
+		ft_free_split_ret(split_ret, k);
 		ft_cleanup(stack, 'e');
 	}
 	return ((int)res * sign);
