@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   array.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdosch <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: gdosch <gdosch@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 13:20:55 by gdosch            #+#    #+#             */
-/*   Updated: 2024/12/10 13:20:56 by gdosch           ###   ########.fr       */
+/*   Updated: 2024/12/19 15:50:25 by gdosch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_cleanup(int **arr, char msg)
 	exit(status);
 }
 
-static int	ft_atoi_ps(const char *nptr, int **stack)
+static int	ft_atoi_ps(char **split_ret, char *nptr, int **stack, size_t *k)
 {
 	unsigned long long	res;
 	int					sign;
@@ -61,7 +61,15 @@ static int	ft_atoi_ps(const char *nptr, int **stack)
 		nptr++;
 	}
 	if ((*nptr < '0' || *nptr > '9') && *nptr != '\0')
+	{
+		while (split_ret[*k])
+		{
+			free(split_ret[*k]);
+			(*k)++;
+		}		
+		free(split_ret);
 		ft_cleanup(stack, 'e');
+	}
 	return ((int)res * sign);
 }
 
@@ -102,7 +110,7 @@ void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size)
 		k = 0;
 		while (split_ret[k])
 		{
-			stack[0][i + j] = ft_atoi_ps(split_ret[k], stack);
+			stack[0][i + j] = ft_atoi_ps(split_ret, split_ret[k], stack, &k);
 			free(split_ret[k]);
 			k++;
 			if (split_ret[k])
