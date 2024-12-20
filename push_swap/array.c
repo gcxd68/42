@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-static void	ft_free_split_ret(char **split_ret, size_t *k)
+static void	ft_free_split_ret(int **stack, char **split_ret, size_t *k)
 {
 	while (split_ret[*k])
 	{
@@ -20,9 +20,10 @@ static void	ft_free_split_ret(char **split_ret, size_t *k)
 		(*k)++;
 	}
 	free(split_ret);
+	ft_cleanup(stack, 'e');
 }
 
-static int	ft_atoi_ps(char **split_ret, char *nptr, int **stack, size_t *k)
+static int	ft_atoi_ps(char *nptr, int **stack, char **split_ret, size_t *k)
 {
 	unsigned long long	res;
 	int					sign;
@@ -40,14 +41,11 @@ static int	ft_atoi_ps(char **split_ret, char *nptr, int **stack, size_t *k)
 		res = res * 10 + *nptr - '0';
 		if ((sign == 1 && res > (unsigned)INT_MAX)
 			|| (sign == -1 && res > (unsigned)(-(long)INT_MIN)))
-			ft_cleanup(stack, 'e');
+			ft_free_split_ret(stack, split_ret, k);
 		nptr++;
 	}
 	if ((*nptr < '0' || *nptr > '9') && *nptr != '\0')
-	{
-		ft_free_split_ret(split_ret, k);
-		ft_cleanup(stack, 'e');
-	}
+		ft_free_split_ret(stack, split_ret, k);
 	return ((int)res * sign);
 }
 
@@ -88,7 +86,7 @@ void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size)
 		k = 0;
 		while (split_ret[k])
 		{
-			stack[0][i + j] = ft_atoi_ps(split_ret, split_ret[k], stack, &k);
+			stack[0][i + j] = ft_atoi_ps(split_ret[k], stack, split_ret, &k);
 			free(split_ret[k]);
 			k++;
 			if (split_ret[k])
