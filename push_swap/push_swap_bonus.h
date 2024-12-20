@@ -17,7 +17,8 @@
 # include <stdlib.h>
 
 void	ft_cleanup(int **arr, char msg);
-void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size);
+void	ft_dupcheck(int **stack, size_t size_a);
+void	ft_fill_arr(int argc, char **argv, int **stack);
 size_t	ft_find_size(int argc, char **argv);
 
 void	ft_sx(int **stack, size_t *size, int num, int msg);

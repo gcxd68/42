@@ -119,7 +119,8 @@ int	main(int argc, char *argv[])
 	if (!stack[1])
 		ft_cleanup(stack, 'e');
 	size[1] = 0;
-	ft_fill_arr(argc, argv, stack, size);
+	ft_fill_arr(argc, argv, stack);
+	ft_dupcheck(stack, size[0]);
 	ft_parse_ops(stack, size);
 	ft_check_arr(stack, size);
 	return (0);

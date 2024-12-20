@@ -113,7 +113,8 @@ int	main(int argc, char *argv[])
 	if (!stack[1])
 		ft_cleanup(stack, 'e');
 	size[1] = 0;
-	ft_fill_arr(argc, argv, stack, size);
+	ft_fill_arr(argc, argv, stack);
+	ft_dupcheck(stack, size[0]);
 	if (ft_check_sort(stack, size) == 1)
 		ft_cleanup(stack, 'n');
 	stack[0] = ft_normalize_arr(stack[0], size[0]);

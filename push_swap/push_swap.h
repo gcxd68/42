@@ -26,10 +26,11 @@ typedef struct s_cost
 	char	rot;
 }	t_cost;
 
-void	ft_cleanup(int **arr, char msg);
 void	ft_apply_cost_plan(int **stack, size_t *size, t_cost best_cost);
 int		ft_check_sort(int **stack, size_t *size);
-void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size);
+void	ft_cleanup(int **arr, char msg);
+void	ft_dupcheck(int **stack, size_t size_a);
+void	ft_fill_arr(int argc, char **argv, int **stack);
 void	ft_find_bounds(int *stack, size_t size, int *bound);
 size_t	ft_find_size(int argc, char **argv);
 

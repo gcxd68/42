@@ -12,44 +12,50 @@
 
 #include "push_swap_bonus.h"
 
-static void	ft_free_split_ret(int **stack, char **split_ret, size_t *k)
+static void	ft_free_split_ret(char **split_ret)
 {
-	while (split_ret[*k])
+	size_t	i;
+
+	i = 0;
+	while (split_ret[i])
 	{
-		free(split_ret[*k]);
-		(*k)++;
+		free(split_ret[i]);
+		split_ret[i] = 0;
+		i++;
 	}
 	free(split_ret);
-	ft_cleanup(stack, 'e');
+	split_ret = 0;
 }
 
-static int	ft_atoi_ps(char *nptr, int **stack, char **split_ret, size_t *k)
+static int	ft_atoi_ps(char **split_ret, ssize_t *k)
 {
 	unsigned long long	res;
 	int					sign;
+	char				*ptr;
 
 	sign = 1;
 	res = 0;
-	while ((*nptr >= '\t' && *nptr <= '\r') || *nptr == ' ')
-		nptr++;
-	if (*nptr == '-')
+	ptr = split_ret[*k];
+	while ((*ptr >= '\t' && *ptr <= '\r') || *ptr == ' ')
+		ptr++;
+	if (*ptr == '-')
 		sign = -1;
-	if (*nptr == '-' || *nptr == '+')
-		nptr++;
-	while (*nptr >= '0' && *nptr <= '9')
+	if (*ptr == '-' || *ptr == '+')
+		ptr++;
+	while (*ptr >= '0' && *ptr <= '9')
 	{
-		res = res * 10 + *nptr - '0';
+		res = res * 10 + *ptr - '0';
 		if ((sign == 1 && res > (unsigned)INT_MAX)
 			|| (sign == -1 && res > (unsigned)(-(long)INT_MIN)))
-			ft_free_split_ret(stack, split_ret, k);
-		nptr++;
+			return (ft_free_split_ret(split_ret), *k = -1, 0);
+		ptr++;
 	}
-	if ((*nptr < '0' || *nptr > '9') && *nptr != '\0')
-		ft_free_split_ret(stack, split_ret, k);
+	if ((*ptr < '0' || *ptr > '9') && *ptr != '\0')
+		return (ft_free_split_ret(split_ret), *k = -1, 0);
 	return ((int)res * sign);
 }
 
-static void	ft_dupcheck(int **stack, size_t size_a)
+void	ft_dupcheck(int **stack, size_t size_a)
 {
 	size_t	i;
 	size_t	j;
@@ -69,12 +75,12 @@ static void	ft_dupcheck(int **stack, size_t size_a)
 	}
 }
 
-void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size)
+void	ft_fill_arr(int argc, char **argv, int **stack)
 {
 	char	**split_ret;
 	size_t	i;
 	size_t	j;
-	size_t	k;
+	ssize_t	k;
 
 	i = 0;
 	j = 0;
@@ -86,16 +92,16 @@ void	ft_fill_arr(int argc, char **argv, int **stack, size_t *size)
 		k = 0;
 		while (split_ret[k])
 		{
-			stack[0][i + j] = ft_atoi_ps(split_ret[k], stack, split_ret, &k);
-			free(split_ret[k]);
+			stack[0][i + j] = ft_atoi_ps(split_ret, &k);
+			if (k < 0)
+				ft_cleanup(stack, 'e');
 			k++;
 			if (split_ret[k])
 				j++;
 		}
-		free(split_ret);
+		ft_free_split_ret(split_ret);
 		i++;
 	}
-	ft_dupcheck(stack, size[0]);
 }
 
 size_t	ft_find_size(int argc, char **argv)
