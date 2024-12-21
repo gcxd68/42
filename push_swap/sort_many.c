@@ -38,35 +38,6 @@ static void	ft_first_sort(int **stack, size_t *size)
 	}
 }
 
-static t_cost	ft_costs(int **stack, size_t *size, int *bound, size_t *j)
-{
-	t_cost	cost;
-	int		prev_a;
-	size_t	i;
-
-	i = 0;
-	prev_a = stack[0][size[0] - 1];
-	while (i < size[0])
-	{
-		if (stack[1][*j] > bound[1] || stack[1][*j] < bound[0])
-		{
-			while (stack[0][i] != bound[0])
-				i++;
-			break ;
-		}
-		if (stack[1][*j] > prev_a && stack[1][*j] < stack[0][i])
-			break ;
-		i++;
-		if (i < size[0])
-			prev_a = stack[0][i - 1];
-	}
-	cost.ra = i;
-	cost.rra = size[0] - i;
-	cost.rb = *j;
-	cost.rrb = size[1] - *j;
-	return (cost);
-}
-
 static void	ft_best_cost(t_cost cost, t_cost *best_cost)
 {
 	cost.rot = 'r';
@@ -81,11 +52,9 @@ static void	ft_best_cost(t_cost cost, t_cost *best_cost)
 			cost.total = cost.rrb;
 		cost.rot = '2';
 	}
-	if (cost.ra + cost.rrb < cost.total
-		|| cost.rra + cost.rb < cost.total)
+	if (cost.ra + cost.rrb < cost.total || cost.rra + cost.rb < cost.total)
 	{
-		if (cost.ra + cost.rrb < cost.total)
-			cost.total = cost.ra + cost.rrb;
+		cost.total = cost.ra + cost.rrb;
 		if (cost.rra + cost.rb < cost.total)
 			cost.total = cost.rra + cost.rb;
 		cost.rot = 'm';
@@ -93,6 +62,30 @@ static void	ft_best_cost(t_cost cost, t_cost *best_cost)
 	cost.total++;
 	if (best_cost->total > cost.total)
 		*best_cost = cost;
+}
+
+static void	ft_get_costs(int **stack, size_t *size, int *bound, t_cost *best_cost)
+{
+	t_cost	cost;
+	size_t	i;
+	size_t	j;
+
+	j = 0;
+	while (j < size[1])
+	{
+		i = 0;
+		while (i < size[0] && (!(i == 0 && stack[1][j] > stack[0][size[0] - 1]
+			&& stack[1][j] < stack[0][i]) && !(i != 0 && stack[1][j]
+			> stack[0][i - 1] && stack[1][j] < stack[0][i]) && !((stack[1][j]
+			> bound[1] || stack[1][j] < bound[0]) && stack[0][i] == bound[0])))
+			i++;
+		cost.ra = i;
+		cost.rra = size[0] - i;
+		cost.rb = j;
+		cost.rrb = size[1] - j;
+		ft_best_cost(cost, best_cost);
+		j++;
+	}
 }
 
 static void	ft_last_sort(int **stack, size_t *size)
@@ -118,21 +111,15 @@ void	ft_sort_many(int **stack, size_t *size)
 {
 	t_cost	best_cost;
 	int		bound[2];
-	size_t	j;
 
 	ft_first_sort(stack, size);
 	ft_sort_five(stack, size);
 	while (size[1] > 0)
 	{
 		best_cost.total = INT_MAX;
-		j = 0;
 		ft_find_bounds(stack[0], size[0], bound);
-		while (j < size[1])
-		{
-			ft_best_cost(ft_costs(stack, size, bound, &j), &best_cost);
-			j++;
-		}
-		ft_apply_cost_plan(stack, size, best_cost);
+		ft_get_costs(stack, size, bound, &best_cost);
+		ft_apply_strategy(stack, size, best_cost);
 	}
 	ft_last_sort(stack, size);
 }

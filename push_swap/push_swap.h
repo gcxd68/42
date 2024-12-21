@@ -26,7 +26,7 @@ typedef struct s_cost
 	char	rot;
 }	t_cost;
 
-void	ft_apply_cost_plan(int **stack, size_t *size, t_cost best_cost);
+void	ft_apply_strategy(int **stack, size_t *size, t_cost best_cost);
 int		ft_check_sort(int **stack, size_t *size);
 void	ft_cleanup(int **arr, char msg);
 void	ft_dupcheck(int **stack, size_t size_a);

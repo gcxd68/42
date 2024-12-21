@@ -111,7 +111,7 @@ static void	ft_m_is_cheaper(int **stack, size_t *size, t_cost best_cost)
 	}
 }
 
-void	ft_apply_cost_plan(int **stack, size_t *size, t_cost best_cost)
+void	ft_apply_strategy(int **stack, size_t *size, t_cost best_cost)
 {
 	if (best_cost.rot == 'r')
 		ft_r_is_cheaper(stack, size, best_cost);

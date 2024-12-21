@@ -12,7 +12,7 @@
 
 #include "push_swap_bonus.h"
 
-static void	ft_free_split_ret(char **split_ret)
+static void	ft_free_arr(char **split_ret)
 {
 	size_t	i;
 
@@ -47,11 +47,11 @@ static int	ft_atoi_ps(char **split_ret, ssize_t *k)
 		res = res * 10 + *ptr - '0';
 		if ((sign == 1 && res > (unsigned)INT_MAX)
 			|| (sign == -1 && res > (unsigned)(-(long)INT_MIN)))
-			return (ft_free_split_ret(split_ret), *k = -1, 0);
+			return (ft_free_arr(split_ret), *k = -1, 0);
 		ptr++;
 	}
 	if ((*ptr < '0' || *ptr > '9') && *ptr != '\0')
-		return (ft_free_split_ret(split_ret), *k = -1, 0);
+		return (ft_free_arr(split_ret), *k = -1, 0);
 	return ((int)res * sign);
 }
 
@@ -99,7 +99,7 @@ void	ft_fill_arr(int argc, char **argv, int **stack)
 			if (split_ret[k])
 				j++;
 		}
-		ft_free_split_ret(split_ret);
+		ft_free_arr(split_ret);
 		i++;
 	}
 }
