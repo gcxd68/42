@@ -46,7 +46,7 @@ static void	ft_best_cost(t_cost cost, t_cost *best_cost)
 		cost.total = cost.rb;
 	if (cost.rra < cost.total && cost.rrb < cost.total)
 	{
-		if (cost.rra > cost.rrb && cost.rra < cost.total)
+		if (cost.rra >= cost.rrb && cost.rra < cost.total)
 			cost.total = cost.rra;
 		else if (cost.rra < cost.rrb && cost.rrb < cost.total)
 			cost.total = cost.rrb;
